@@ -38,6 +38,37 @@ namespace Graph {
 	protected:
 
 	private:
+		//Vertices
+		Label^ newLabel(System::String ^text, int x, int y){
+			Label^ l = gcnew Label();
+			//l->AutoSize = true;
+			l->BackColor = System::Drawing::Color::LightBlue;
+			l->Location = System::Drawing::Point(x, y);
+			l->Name = L"label1asdf";
+			l->Size = System::Drawing::Size(32, 32);
+			l->TabIndex = 0;
+			l->Text = text;
+			l->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
+			this->panel1->Controls->Add(l);
+			return l;
+		}
+
+		//Edges
+		Label^ newLabel2(System::String^ text, int x, int y){
+			Label^ l = gcnew Label();
+			//l->AutoSize = true;
+			l->BackColor = System::Drawing::Color::Transparent;
+			l->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 6, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			l->Location = System::Drawing::Point(x, y);
+			l->Name = L"label1asdf";
+			l->Size = System::Drawing::Size(16, 16);
+			l->TabIndex = 0;
+			l->Text = text;
+			l->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
+			this->panel1->Controls->Add(l);
+			return l;
+		}
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -78,6 +109,7 @@ namespace Graph {
 #pragma endregion
 	private: System::Void GraphForm_Load(System::Object^  sender, System::EventArgs^  e) {
 		g = panel1->CreateGraphics();
+
 	}
 	private: System::Void panel1_Paint(System::Object^  sender, System::Windows::Forms::PaintEventArgs^  e) {
 
