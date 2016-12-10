@@ -1,6 +1,7 @@
 #pragma once
+#include "Graph.h"
 
-namespace Graph {
+namespace GraphProject {
 
 	using namespace System;
 	using namespace System::ComponentModel;
@@ -32,6 +33,7 @@ namespace Graph {
 			if (components)
 			{
 				delete components;
+				delete g;
 			}
 		}
 	private: System::Windows::Forms::Panel^  panel1;
@@ -75,6 +77,10 @@ namespace Graph {
 		System::ComponentModel::Container ^components;
 
 		Graphics ^g;
+		Pen ^edgePen;
+
+
+		Graph *graph;
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -108,11 +114,28 @@ namespace Graph {
 		}
 #pragma endregion
 	private: System::Void GraphForm_Load(System::Object^  sender, System::EventArgs^  e) {
+		edgePen = gcnew Pen(Color::LightBlue, 6);
+		edgePen->StartCap = Drawing2D::LineCap::ArrowAnchor;
+		edgePen->EndCap = Drawing2D::LineCap::RoundAnchor;
+		graph = new Graph();
+		graph->LoadVertices("Vertices.txt");
+		graph->LoadEdges("Edges.txt");
 		g = panel1->CreateGraphics();
+
+		for (int i = 0; i < graph->VertexCount(); i++){
+			newLabel(i.ToString(), graph->GetVertex(i)->GetX(), graph->GetVertex(i)->GetY());
+		}
 
 	}
 	private: System::Void panel1_Paint(System::Object^  sender, System::Windows::Forms::PaintEventArgs^  e) {
-
+		for (int i = 0; i < graph->VertexCount(); i++){
+			for (int j = 0; j < graph->GetVertex(i)->EdgeCount(); j++){
+				Vertex *v1 = graph->GetVertex(i);
+				int v2Index = v1->GetEdge(j)->DestVertexIndex;
+				Vertex *v2 = graph->GetVertex(v2Index);
+				g->DrawLine(edgePen, v1->GetX() + 16, v1->GetY() + 16, v2->GetX() + 16, v2->GetY() + 16);
+			}
+		}
 	}
 	};
 }

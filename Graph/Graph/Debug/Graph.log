@@ -1,7 +1,0 @@
-﻿  GraphForm.cpp
-  Main.cpp
-  Generating Code...
-  .NETFramework,Version=v4.5.2.AssemblyAttributes.cpp
-  GraphForm.obj : /DEBUG:FASTLINK is not supported when managed code is present; restarting link with /DEBUG:FULL
-  Graph.vcxproj -> K:\Github\CS312-Graph\Graph\Debug\Graph.exe
-  Graph.vcxproj -> K:\Github\CS312-Graph\Graph\Debug\Graph.pdb (Partial PDB)

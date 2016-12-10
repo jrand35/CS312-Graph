@@ -1,6 +1,6 @@
 #include "GraphForm.h"
 #include <iostream>
-using namespace Graph;
+using namespace GraphProject;
 using namespace System;
 using namespace System::Windows::Forms;
 
