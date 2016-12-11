@@ -1,6 +1,8 @@
 #pragma once
 #include "Graph.h"
 
+const int ARROW_OFFSET = 30;
+
 namespace GraphProject {
 
 	using namespace System;
@@ -115,11 +117,12 @@ namespace GraphProject {
 #pragma endregion
 	private: System::Void GraphForm_Load(System::Object^  sender, System::EventArgs^  e) {
 		edgePen = gcnew Pen(Color::LightBlue, 6);
-		edgePen->StartCap = Drawing2D::LineCap::ArrowAnchor;
-		edgePen->EndCap = Drawing2D::LineCap::RoundAnchor;
+		Pen ^a = gcnew Pen
+		//edgePen->StartCap = Drawing2D::LineCap::RoundAnchor;
+		edgePen->EndCap = Drawing2D::LineCap::ArrowAnchor;
 		graph = new Graph();
-		graph->LoadVertices("Vertices.txt");
-		graph->LoadEdges("Edges.txt");
+		graph->LoadVertices("Acyclic Graph Vertices.txt");
+		graph->LoadEdges("Acyclic Graph Edges.txt");
 		g = panel1->CreateGraphics();
 
 		for (int i = 0; i < graph->VertexCount(); i++){
@@ -133,7 +136,19 @@ namespace GraphProject {
 				Vertex *v1 = graph->GetVertex(i);
 				int v2Index = v1->GetEdge(j)->DestVertexIndex;
 				Vertex *v2 = graph->GetVertex(v2Index);
-				g->DrawLine(edgePen, v1->GetX() + 16, v1->GetY() + 16, v2->GetX() + 16, v2->GetY() + 16);
+				int x1_ = v1->GetX();
+				int y1_ = v1->GetY();
+				int x2_ = v2->GetX();
+				int y2_ = v2->GetY();
+
+				float direction = Math::Atan2(y2_ - y1_, x2_ - x1_);
+
+				int x1 = x1_ + (ARROW_OFFSET * Math::Cos(direction));
+				int y1 = y1_ + (ARROW_OFFSET * Math::Sin(direction));
+				int x2 = x2_ - (ARROW_OFFSET * Math::Cos(direction));
+				int y2 = y2_ - (ARROW_OFFSET * Math::Sin(direction));
+
+				g->DrawLine(edgePen, x1 + 16, y1 + 16, x2 + 16, y2 + 16);
 			}
 		}
 	}

@@ -64,7 +64,7 @@ Vertex *Graph::GetVertex(int index) {
 }
 
 void Graph::AddVertex(int index, int x, int y){
-	vertices[index].Set(index, x, y);
+	vertices[vertexCount].Set(index, x, y);
 	vertexCount++;
 }
 
