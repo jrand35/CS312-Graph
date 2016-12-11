@@ -137,6 +137,22 @@ void Graph::MarkEntireGraph(bool mark){
 	}
 }
 
+bool Graph::CheckIsConnected() {
+	bool connected = false;
+	for (int i = 0; i < vertexCount; i++){
+		connected = false;
+		for (int j = 0; j < vertexCount; j++){
+			if (adjacencyMatrix[i][j] != 0 || adjacencyMatrix[j][i] != 0){
+				connected = true;
+				continue;
+			}
+		}
+		if (!connected)
+			return false;
+	}
+	return true;
+}
+
 void Graph::AddVertex(int index, int x, int y){
 	vertices[vertexCount].Set(index, x, y);
 	vertexCount++;
@@ -154,6 +170,13 @@ void Graph::SetupAdjacencyMatrix(){
 		adjacencyMatrix[i] = new int[vertexCount];
 		for (int j = 0; j < vertexCount; j++){
 			adjacencyMatrix[i][j] = 0;
+		}
+	}
+
+	for (int i = 0; i < vertexCount; i++){
+		for (int j = 0; j < vertices[i].EdgeCount(); j++){
+			Edge *e = vertices[i].GetEdge(j);
+			adjacencyMatrix[i][e->DestVertexIndex] = e->Weight;
 		}
 	}
 }

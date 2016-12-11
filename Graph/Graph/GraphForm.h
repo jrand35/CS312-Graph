@@ -274,10 +274,11 @@ namespace GraphProject {
 		edgePen2 = gcnew Pen(Color::Blue, 6);
 		edgePen2->EndCap = Drawing2D::LineCap::ArrowAnchor;
 		graph = new Graph();
-		graph->LoadVertices("Small Graph Vertices.txt");
-		graph->LoadEdges("Small Graph Edges.txt");
+		graph->LoadVertices("Acyclic Graph Vertices.txt");
+		graph->LoadEdges("Acyclic Graph Edges.txt");
 		labels = gcnew array<Label^>(graph->VertexCount());
-		Debugging->Text = gcnew String(graph->GetEdgeWeights().c_str());
+		//Debugging->Text = gcnew String(graph->GetEdgeWeights().c_str());
+		Debugging->Text = graph->CheckIsConnected().ToString();
 		int labelCount = 0;
 
 		g = panel1->CreateGraphics();
@@ -306,7 +307,7 @@ namespace GraphProject {
 				int y2 = y2_ - (ARROW_OFFSET * Math::Sin(direction));
 
 				if (!v1->GetEdge(j)->Marked){
-					//g->DrawLine(edgePen, x1 + 16, y1 + 16, x2 + 16, y2 + 16);
+					g->DrawLine(edgePen, x1 + 16, y1 + 16, x2 + 16, y2 + 16);
 				}
 				else{
 					g->DrawLine(edgePen2, x1 + 16, y1 + 16, x2 + 16, y2 + 16);

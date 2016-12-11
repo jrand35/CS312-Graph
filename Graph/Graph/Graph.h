@@ -20,6 +20,7 @@ public:
 	bool Kruskal();
 	string GetEdgeWeights();
 	void MarkEntireGraph(bool mark);
+	bool CheckIsConnected();
 private:
 	int **adjacencyMatrix;
 	Vertex vertices[MAX_VERTICES];
