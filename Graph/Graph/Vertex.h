@@ -5,6 +5,7 @@ const int MAX_EDGES = 20;
 struct Edge {
 	int Weight;
 	int DestVertexIndex;
+	bool Marked;
 	bool operator<(Edge &other);
 	bool operator>(Edge &other);
 	bool operator==(Edge &other);

@@ -29,6 +29,7 @@ void Vertex::Set(int index, int x, int y){
 Edge *Vertex::AddEdge(int otherVertex, int weight) {
 	edges[edgeCount].DestVertexIndex = otherVertex;
 	edges[edgeCount].Weight = weight;
+	edges[edgeCount].Marked = false;
 	edgeCount++;
 	return &edges[edgeCount - 1];
 }
@@ -59,7 +60,7 @@ int Vertex::EdgeCount() const{
 }
 
 Edge *Vertex::GetEdge(int index){
-	return &edges[index];
+	return (edges + index);
 }
 
 bool Edge::operator<(Edge &other){

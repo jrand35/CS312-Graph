@@ -16,15 +16,18 @@ public:
 	void LoadEdges(string filename);
 	int VertexCount() const;
 	Vertex *GetVertex(int index);
-	bool Prim(int startingVertex);
+	void Prim(int vertex);
 	bool Kruskal();
 	string GetEdgeWeights();
-	void MarkAllVertices(bool mark);
+	void MarkEntireGraph(bool mark);
 private:
 	int **adjacencyMatrix;
 	Vertex vertices[MAX_VERTICES];
-	list<Edge> edges;
+	list<Edge*> edges;
+	list<Edge*> spanningTreeEdges;
+	int treeEdgeCount;
 	int vertexCount;
+	void PrimStep();
 	void AddVertex(int index, int x, int y);
 	void Connect(int vertex1, int vertex2, int weight);
 	void SetupAdjacencyMatrix();

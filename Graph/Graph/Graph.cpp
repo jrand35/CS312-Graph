@@ -2,10 +2,12 @@
 
 Graph::Graph(){
 	vertexCount = 0;
+	treeEdgeCount = 0;
 }
 
 Graph::Graph(bool randomize, int vertices){
 	vertexCount = 0;
+	treeEdgeCount = 0;
 	if (randomize){
 
 	}
@@ -69,25 +71,69 @@ Vertex *Graph::GetVertex(int index) {
 	return &vertices[index];
 }
 
-bool Graph::Prim(int startingVertex){
-	return true;
+void Graph::Prim(int vertex){
+	spanningTreeEdges.clear();
+	treeEdgeCount = 0;
+	if (vertices[vertex].IsMarked()){
+		return;
+	}
+	vertices[vertex].Mark(true);
+	for (int i = 0; i < vertices[vertex].EdgeCount(); i++){
+		spanningTreeEdges.push_back(vertices[vertex].GetEdge(i));
+		Edge *e = vertices[vertex].GetEdge(i);
+		treeEdgeCount++;
+	}
+	PrimStep();
 }
+
+void Graph::PrimStep(){
+	list<Edge*>::iterator it;
+	Edge *smallestEdge = nullptr;
+	Vertex *v = nullptr;
+	int min = 99999;
+	for (it = spanningTreeEdges.begin(); it != spanningTreeEdges.end(); it++){
+		v = &vertices[(*it)->DestVertexIndex];
+		if ((*it)->Weight < min && !v->IsMarked()){
+			min = (*it)->Weight;
+			smallestEdge = *it;
+		}
+	}
+	if (min != 99999){
+		v = &vertices[smallestEdge->DestVertexIndex];
+		v->Mark(true);
+		smallestEdge->Marked = true;
+
+		//Add the edges connected to the vertex to the spanning tree
+		for (int i = 0; i < v->EdgeCount(); i++){
+			spanningTreeEdges.push_back(v->GetEdge(i));
+			treeEdgeCount++;
+		}
+		PrimStep();
+	}
+	else{
+		return;
+	}
+}
+
 bool Graph::Kruskal(){
 	return true;
 }
 
 string Graph::GetEdgeWeights(){
-	list<Edge>::iterator it;
+	list<Edge*>::iterator it;
 	string str = "";
 	for (it = edges.begin(); it != edges.end(); it++){
-		str += to_string(it->Weight) + " ";
+		str += to_string((*it)->Weight) + " ";
 	}
 	return str;
 }
 
-void Graph::MarkAllVertices(bool mark){
+void Graph::MarkEntireGraph(bool mark){
 	for (int i = 0; i < vertexCount; i++){
 		vertices[i].Mark(mark);
+	}
+	for (list<Edge*>::iterator it = edges.begin(); it != edges.end(); it++){
+		(*it)->Marked = mark;
 	}
 }
 
@@ -98,7 +144,7 @@ void Graph::AddVertex(int index, int x, int y){
 
 void Graph::Connect(int vertex1, int vertex2, int weight){
 	Edge *e = vertices[vertex1].AddEdge(vertex2, weight);
-	edges.push_back(*e);
+	edges.push_back(e);
 }
 
 void Graph::SetupAdjacencyMatrix(){
