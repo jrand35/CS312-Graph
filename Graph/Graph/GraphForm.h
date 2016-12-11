@@ -38,6 +38,17 @@ namespace GraphProject {
 				delete g;
 			}
 		}
+	private: System::Windows::Forms::Label^  label1;
+	protected:
+	private: System::Windows::Forms::Button^  button1;
+	private: System::Windows::Forms::Button^  button2;
+	private: System::Windows::Forms::Label^  label2;
+	private: System::Windows::Forms::Button^  button3;
+	private: System::Windows::Forms::TextBox^  textBox1;
+	private: System::Windows::Forms::Label^  label3;
+	private: System::Windows::Forms::Label^  Debugging;
+	private: System::Windows::Forms::Label^  label4;
+
 	private: System::Windows::Forms::Panel^  panel1;
 	protected:
 
@@ -73,6 +84,10 @@ namespace GraphProject {
 			this->panel1->Controls->Add(l);
 			return l;
 		}
+		void MarkLabel(Label ^label){
+			label->BackColor = System::Drawing::Color::Blue;
+			label->ForeColor = System::Drawing::Color::White;
+		}
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -80,6 +95,7 @@ namespace GraphProject {
 
 		Graphics ^g;
 		Pen ^edgePen;
+		Pen ^edgePen2;
 
 
 		Graph *graph;
@@ -92,6 +108,15 @@ namespace GraphProject {
 		void InitializeComponent(void)
 		{
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
+			this->label1 = (gcnew System::Windows::Forms::Label());
+			this->button1 = (gcnew System::Windows::Forms::Button());
+			this->button2 = (gcnew System::Windows::Forms::Button());
+			this->label2 = (gcnew System::Windows::Forms::Label());
+			this->button3 = (gcnew System::Windows::Forms::Button());
+			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
+			this->label3 = (gcnew System::Windows::Forms::Label());
+			this->Debugging = (gcnew System::Windows::Forms::Label());
+			this->label4 = (gcnew System::Windows::Forms::Label());
 			this->SuspendLayout();
 			// 
 			// panel1
@@ -102,27 +127,121 @@ namespace GraphProject {
 			this->panel1->TabIndex = 0;
 			this->panel1->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &GraphForm::panel1_Paint);
 			// 
+			// label1
+			// 
+			this->label1->AutoSize = true;
+			this->label1->Location = System::Drawing::Point(858, 57);
+			this->label1->Name = L"label1";
+			this->label1->Size = System::Drawing::Size(116, 13);
+			this->label1->TabIndex = 1;
+			this->label1->Text = L"Make a Spanning Tree";
+			// 
+			// button1
+			// 
+			this->button1->Location = System::Drawing::Point(861, 73);
+			this->button1->Name = L"button1";
+			this->button1->Size = System::Drawing::Size(107, 23);
+			this->button1->TabIndex = 2;
+			this->button1->Text = L"Prim\'s Algorithm";
+			this->button1->UseVisualStyleBackColor = true;
+			// 
+			// button2
+			// 
+			this->button2->Location = System::Drawing::Point(861, 102);
+			this->button2->Name = L"button2";
+			this->button2->Size = System::Drawing::Size(107, 23);
+			this->button2->TabIndex = 3;
+			this->button2->Text = L"Kruskal\'s Algorithm";
+			this->button2->UseVisualStyleBackColor = true;
+			// 
+			// label2
+			// 
+			this->label2->AutoSize = true;
+			this->label2->Location = System::Drawing::Point(882, 164);
+			this->label2->Name = L"label2";
+			this->label2->Size = System::Drawing::Size(68, 13);
+			this->label2->TabIndex = 4;
+			this->label2->Text = L"Make a Path";
+			// 
+			// button3
+			// 
+			this->button3->Location = System::Drawing::Point(861, 180);
+			this->button3->Name = L"button3";
+			this->button3->Size = System::Drawing::Size(107, 23);
+			this->button3->TabIndex = 5;
+			this->button3->Text = L"Dijkstra\'s Algorithm";
+			this->button3->UseVisualStyleBackColor = true;
+			// 
+			// textBox1
+			// 
+			this->textBox1->Location = System::Drawing::Point(818, 73);
+			this->textBox1->MaxLength = 2;
+			this->textBox1->Name = L"textBox1";
+			this->textBox1->Size = System::Drawing::Size(37, 20);
+			this->textBox1->TabIndex = 6;
+			// 
+			// label3
+			// 
+			this->label3->AutoSize = true;
+			this->label3->Location = System::Drawing::Point(776, 57);
+			this->label3->Name = L"label3";
+			this->label3->Size = System::Drawing::Size(76, 13);
+			this->label3->TabIndex = 7;
+			this->label3->Text = L"Starting Vertex";
+			// 
+			// Debugging
+			// 
+			this->Debugging->BackColor = System::Drawing::SystemColors::ButtonHighlight;
+			this->Debugging->Location = System::Drawing::Point(778, 341);
+			this->Debugging->Name = L"Debugging";
+			this->Debugging->RightToLeft = System::Windows::Forms::RightToLeft::No;
+			this->Debugging->Size = System::Drawing::Size(216, 180);
+			this->Debugging->TabIndex = 8;
+			this->Debugging->Text = L"Debugging";
+			// 
+			// label4
+			// 
+			this->label4->AutoSize = true;
+			this->label4->Location = System::Drawing::Point(778, 317);
+			this->label4->Name = L"label4";
+			this->label4->Size = System::Drawing::Size(59, 13);
+			this->label4->TabIndex = 9;
+			this->label4->Text = L"Debugging";
+			// 
 			// GraphForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(784, 762);
+			this->ClientSize = System::Drawing::Size(1006, 762);
+			this->Controls->Add(this->label4);
+			this->Controls->Add(this->Debugging);
+			this->Controls->Add(this->label3);
+			this->Controls->Add(this->textBox1);
+			this->Controls->Add(this->button3);
+			this->Controls->Add(this->label2);
+			this->Controls->Add(this->button2);
+			this->Controls->Add(this->button1);
+			this->Controls->Add(this->label1);
 			this->Controls->Add(this->panel1);
 			this->Name = L"GraphForm";
 			this->Text = L"Graph";
 			this->Load += gcnew System::EventHandler(this, &GraphForm::GraphForm_Load);
 			this->ResumeLayout(false);
+			this->PerformLayout();
 
 		}
 #pragma endregion
 	private: System::Void GraphForm_Load(System::Object^  sender, System::EventArgs^  e) {
 		edgePen = gcnew Pen(Color::LightBlue, 6);
-		Pen ^a = gcnew Pen
 		//edgePen->StartCap = Drawing2D::LineCap::RoundAnchor;
 		edgePen->EndCap = Drawing2D::LineCap::ArrowAnchor;
+		edgePen2 = gcnew Pen(Color::Blue, 6);
+		edgePen2->EndCap = Drawing2D::LineCap::ArrowAnchor;
 		graph = new Graph();
-		graph->LoadVertices("Acyclic Graph Vertices.txt");
-		graph->LoadEdges("Acyclic Graph Edges.txt");
+		graph->LoadVertices("Small Graph Vertices.txt");
+		graph->LoadEdges("Small Graph Edges.txt");
+		Debugging->Text = gcnew String(graph->GetEdgeWeights().c_str());
+
 		g = panel1->CreateGraphics();
 
 		for (int i = 0; i < graph->VertexCount(); i++){

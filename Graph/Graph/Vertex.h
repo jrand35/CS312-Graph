@@ -5,6 +5,11 @@ const int MAX_EDGES = 20;
 struct Edge {
 	int Weight;
 	int DestVertexIndex;
+	bool operator<(Edge &other);
+	bool operator>(Edge &other);
+	bool operator==(Edge &other);
+	bool operator<=(Edge &other);
+	bool operator>=(Edge &other);
 };
 
 class Vertex {
@@ -13,8 +18,9 @@ public:
 	Vertex(int index, int x, int y);
 	~Vertex();
 	void Set(int index, int x, int y);
-	void AddEdge(int otherVertex, int weight);
+	Edge *AddEdge(int otherVertex, int weight);
 	void Mark(bool mark);
+	bool IsMarked() const;
 	int GetIndex() const;
 	int GetX() const;
 	int GetY() const;

@@ -24,14 +24,19 @@ void Vertex::Set(int index, int x, int y){
 	Vertex::y = y;
 }
 
-void Vertex::AddEdge(int otherVertex, int weight) {
+Edge *Vertex::AddEdge(int otherVertex, int weight) {
 	edges[edgeCount].DestVertexIndex = otherVertex;
 	edges[edgeCount].Weight = weight;
 	edgeCount++;
+	return &edges[edgeCount - 1];
 }
 
 void Vertex::Mark(bool mark){
 	marked = mark;
+}
+
+bool Vertex::IsMarked() const{
+	return marked;
 }
 
 int Vertex::GetIndex() const
@@ -53,4 +58,20 @@ int Vertex::EdgeCount() const{
 
 Edge *Vertex::GetEdge(int index){
 	return &edges[index];
+}
+
+bool Edge::operator<(Edge &other){
+	return Weight < other.Weight;
+}
+bool Edge::operator>(Edge &other){
+	return Weight > other.Weight;
+}
+bool Edge::operator==(Edge &other){
+	return Weight == other.Weight;
+}
+bool Edge::operator<=(Edge &other){
+	return Weight <= other.Weight;
+}
+bool Edge::operator>=(Edge &other){
+	return Weight >= other.Weight;
 }

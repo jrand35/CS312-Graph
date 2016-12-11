@@ -7,6 +7,7 @@ Graph::Graph(){
 Graph::Graph(bool randomize, int vertices){
 	vertexCount = 0;
 	if (randomize){
+
 	}
 }
 
@@ -53,6 +54,7 @@ void Graph::LoadEdges(string filename){
 		}
 	}
 	file.close();
+	edges.sort();
 }
 
 int Graph::VertexCount() const{
@@ -63,11 +65,21 @@ Vertex *Graph::GetVertex(int index) {
 	return &vertices[index];
 }
 
+string Graph::GetEdgeWeights(){
+	list<Edge>::iterator it;
+	string str = "";
+	for (it = edges.begin(); it != edges.end(); it++){
+		str += to_string(it->Weight) + " ";
+	}
+	return str;
+}
+
 void Graph::AddVertex(int index, int x, int y){
 	vertices[vertexCount].Set(index, x, y);
 	vertexCount++;
 }
 
 void Graph::Connect(int vertex1, int vertex2, int weight){
-	vertices[vertex1].AddEdge(vertex2, weight);
+	Edge *e = vertices[vertex1].AddEdge(vertex2, weight);
+	edges.push_back(*e);
 }
