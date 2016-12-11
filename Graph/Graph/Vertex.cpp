@@ -1,6 +1,7 @@
 #include "Vertex.h"
 
 Vertex::Vertex(){
+	marked = false;
 	index = 0;
 	x = 0;
 	y = 0;
@@ -8,6 +9,7 @@ Vertex::Vertex(){
 }
 
 Vertex::Vertex(int index, int x, int y) {
+	marked = false;
 	Vertex::index = index;
 	Vertex::x = x;
 	Vertex::y = y;

@@ -39,15 +39,20 @@ namespace GraphProject {
 			}
 		}
 	private: System::Windows::Forms::Label^  label1;
+	private: System::Windows::Forms::Button^  primButton;
+	private: System::Windows::Forms::Button^  kruskalButton;
 	protected:
-	private: System::Windows::Forms::Button^  button1;
-	private: System::Windows::Forms::Button^  button2;
+
+
 	private: System::Windows::Forms::Label^  label2;
-	private: System::Windows::Forms::Button^  button3;
-	private: System::Windows::Forms::TextBox^  textBox1;
+	private: System::Windows::Forms::Button^  dijkstraButton;
+	private: System::Windows::Forms::TextBox^  vertexBox;
+
+
 	private: System::Windows::Forms::Label^  label3;
 	private: System::Windows::Forms::Label^  Debugging;
 	private: System::Windows::Forms::Label^  label4;
+	private: System::Windows::Forms::Button^  resetButton;
 
 	private: System::Windows::Forms::Panel^  panel1;
 	protected:
@@ -84,9 +89,15 @@ namespace GraphProject {
 			this->panel1->Controls->Add(l);
 			return l;
 		}
-		void MarkLabel(Label ^label){
-			label->BackColor = System::Drawing::Color::Blue;
-			label->ForeColor = System::Drawing::Color::White;
+		void MarkLabel(Label ^label, bool mark){
+			if (mark){
+				label->BackColor = System::Drawing::Color::Blue;
+				label->ForeColor = System::Drawing::Color::White;
+			}
+			else{
+				label->BackColor = System::Drawing::Color::LightBlue;
+				label->BackColor = System::Drawing::Color::Black;
+			}
 		}
 		/// <summary>
 		/// Required designer variable.
@@ -96,6 +107,7 @@ namespace GraphProject {
 		Graphics ^g;
 		Pen ^edgePen;
 		Pen ^edgePen2;
+		array<Label^>^ labels;
 
 
 		Graph *graph;
@@ -109,14 +121,15 @@ namespace GraphProject {
 		{
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
 			this->label1 = (gcnew System::Windows::Forms::Label());
-			this->button1 = (gcnew System::Windows::Forms::Button());
-			this->button2 = (gcnew System::Windows::Forms::Button());
+			this->primButton = (gcnew System::Windows::Forms::Button());
+			this->kruskalButton = (gcnew System::Windows::Forms::Button());
 			this->label2 = (gcnew System::Windows::Forms::Label());
-			this->button3 = (gcnew System::Windows::Forms::Button());
-			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
+			this->dijkstraButton = (gcnew System::Windows::Forms::Button());
+			this->vertexBox = (gcnew System::Windows::Forms::TextBox());
 			this->label3 = (gcnew System::Windows::Forms::Label());
 			this->Debugging = (gcnew System::Windows::Forms::Label());
 			this->label4 = (gcnew System::Windows::Forms::Label());
+			this->resetButton = (gcnew System::Windows::Forms::Button());
 			this->SuspendLayout();
 			// 
 			// panel1
@@ -136,23 +149,24 @@ namespace GraphProject {
 			this->label1->TabIndex = 1;
 			this->label1->Text = L"Make a Spanning Tree";
 			// 
-			// button1
+			// primButton
 			// 
-			this->button1->Location = System::Drawing::Point(861, 73);
-			this->button1->Name = L"button1";
-			this->button1->Size = System::Drawing::Size(107, 23);
-			this->button1->TabIndex = 2;
-			this->button1->Text = L"Prim\'s Algorithm";
-			this->button1->UseVisualStyleBackColor = true;
+			this->primButton->Location = System::Drawing::Point(861, 73);
+			this->primButton->Name = L"primButton";
+			this->primButton->Size = System::Drawing::Size(107, 23);
+			this->primButton->TabIndex = 2;
+			this->primButton->Text = L"Prim\'s Algorithm";
+			this->primButton->UseVisualStyleBackColor = true;
+			this->primButton->Click += gcnew System::EventHandler(this, &GraphForm::primButton_Click);
 			// 
-			// button2
+			// kruskalButton
 			// 
-			this->button2->Location = System::Drawing::Point(861, 102);
-			this->button2->Name = L"button2";
-			this->button2->Size = System::Drawing::Size(107, 23);
-			this->button2->TabIndex = 3;
-			this->button2->Text = L"Kruskal\'s Algorithm";
-			this->button2->UseVisualStyleBackColor = true;
+			this->kruskalButton->Location = System::Drawing::Point(861, 102);
+			this->kruskalButton->Name = L"kruskalButton";
+			this->kruskalButton->Size = System::Drawing::Size(107, 23);
+			this->kruskalButton->TabIndex = 3;
+			this->kruskalButton->Text = L"Kruskal\'s Algorithm";
+			this->kruskalButton->UseVisualStyleBackColor = true;
 			// 
 			// label2
 			// 
@@ -163,22 +177,22 @@ namespace GraphProject {
 			this->label2->TabIndex = 4;
 			this->label2->Text = L"Make a Path";
 			// 
-			// button3
+			// dijkstraButton
 			// 
-			this->button3->Location = System::Drawing::Point(861, 180);
-			this->button3->Name = L"button3";
-			this->button3->Size = System::Drawing::Size(107, 23);
-			this->button3->TabIndex = 5;
-			this->button3->Text = L"Dijkstra\'s Algorithm";
-			this->button3->UseVisualStyleBackColor = true;
+			this->dijkstraButton->Location = System::Drawing::Point(861, 180);
+			this->dijkstraButton->Name = L"dijkstraButton";
+			this->dijkstraButton->Size = System::Drawing::Size(107, 23);
+			this->dijkstraButton->TabIndex = 5;
+			this->dijkstraButton->Text = L"Dijkstra\'s Algorithm";
+			this->dijkstraButton->UseVisualStyleBackColor = true;
 			// 
-			// textBox1
+			// vertexBox
 			// 
-			this->textBox1->Location = System::Drawing::Point(818, 73);
-			this->textBox1->MaxLength = 2;
-			this->textBox1->Name = L"textBox1";
-			this->textBox1->Size = System::Drawing::Size(37, 20);
-			this->textBox1->TabIndex = 6;
+			this->vertexBox->Location = System::Drawing::Point(818, 73);
+			this->vertexBox->MaxLength = 2;
+			this->vertexBox->Name = L"vertexBox";
+			this->vertexBox->Size = System::Drawing::Size(37, 20);
+			this->vertexBox->TabIndex = 6;
 			// 
 			// label3
 			// 
@@ -208,19 +222,30 @@ namespace GraphProject {
 			this->label4->TabIndex = 9;
 			this->label4->Text = L"Debugging";
 			// 
+			// resetButton
+			// 
+			this->resetButton->Location = System::Drawing::Point(893, 271);
+			this->resetButton->Name = L"resetButton";
+			this->resetButton->Size = System::Drawing::Size(75, 23);
+			this->resetButton->TabIndex = 10;
+			this->resetButton->Text = L"Reset";
+			this->resetButton->UseVisualStyleBackColor = true;
+			this->resetButton->Click += gcnew System::EventHandler(this, &GraphForm::resetButton_Click);
+			// 
 			// GraphForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(1006, 762);
+			this->Controls->Add(this->resetButton);
 			this->Controls->Add(this->label4);
 			this->Controls->Add(this->Debugging);
 			this->Controls->Add(this->label3);
-			this->Controls->Add(this->textBox1);
-			this->Controls->Add(this->button3);
+			this->Controls->Add(this->vertexBox);
+			this->Controls->Add(this->dijkstraButton);
 			this->Controls->Add(this->label2);
-			this->Controls->Add(this->button2);
-			this->Controls->Add(this->button1);
+			this->Controls->Add(this->kruskalButton);
+			this->Controls->Add(this->primButton);
 			this->Controls->Add(this->label1);
 			this->Controls->Add(this->panel1);
 			this->Name = L"GraphForm";
@@ -240,14 +265,16 @@ namespace GraphProject {
 		graph = new Graph();
 		graph->LoadVertices("Small Graph Vertices.txt");
 		graph->LoadEdges("Small Graph Edges.txt");
+		labels = gcnew array<Label^>(graph->VertexCount());
 		Debugging->Text = gcnew String(graph->GetEdgeWeights().c_str());
+		int labelCount = 0;
 
 		g = panel1->CreateGraphics();
 
 		for (int i = 0; i < graph->VertexCount(); i++){
-			newLabel(i.ToString(), graph->GetVertex(i)->GetX(), graph->GetVertex(i)->GetY());
+			Label^ l = newLabel(i.ToString(), graph->GetVertex(i)->GetX(), graph->GetVertex(i)->GetY());
+			labels[labelCount++] = l;
 		}
-
 	}
 	private: System::Void panel1_Paint(System::Object^  sender, System::Windows::Forms::PaintEventArgs^  e) {
 		for (int i = 0; i < graph->VertexCount(); i++){
@@ -271,5 +298,23 @@ namespace GraphProject {
 			}
 		}
 	}
-	};
+	private: System::Void primButton_Click(System::Object^  sender, System::EventArgs^  e) {
+		int num = -1;
+		bool result = int::TryParse(vertexBox->Text, num);
+		if (!result || num < 0 || num > graph->VertexCount())
+			return;
+
+		graph->Prim(num);
+		for (int i = 0; i < graph->VertexCount(); i++){
+			if (graph->GetVertex(i)->IsMarked()){
+				MarkLabel(labels[i], true);
+			}
+		}
+		panel1->Refresh();
+	}
+	private: System::Void resetButton_Click(System::Object^  sender, System::EventArgs^  e) {
+		graph->MarkAllVertices(false);
+		panel1->Refresh();
+	}
+};
 }

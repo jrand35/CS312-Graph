@@ -12,7 +12,10 @@ Graph::Graph(bool randomize, int vertices){
 }
 
 Graph::~Graph(){
-
+	for (int i = 0; i < vertexCount; i++){
+		delete[] adjacencyMatrix[i];
+	}
+	delete[] adjacencyMatrix;
 }
 
 void Graph::LoadVertices(string filename){
@@ -55,6 +58,7 @@ void Graph::LoadEdges(string filename){
 	}
 	file.close();
 	edges.sort();
+	SetupAdjacencyMatrix();
 }
 
 int Graph::VertexCount() const{
@@ -63,6 +67,13 @@ int Graph::VertexCount() const{
 
 Vertex *Graph::GetVertex(int index) {
 	return &vertices[index];
+}
+
+bool Graph::Prim(int startingVertex){
+	return true;
+}
+bool Graph::Kruskal(){
+	return true;
 }
 
 string Graph::GetEdgeWeights(){
@@ -74,6 +85,12 @@ string Graph::GetEdgeWeights(){
 	return str;
 }
 
+void Graph::MarkAllVertices(bool mark){
+	for (int i = 0; i < vertexCount; i++){
+		vertices[i].Mark(mark);
+	}
+}
+
 void Graph::AddVertex(int index, int x, int y){
 	vertices[vertexCount].Set(index, x, y);
 	vertexCount++;
@@ -82,4 +99,15 @@ void Graph::AddVertex(int index, int x, int y){
 void Graph::Connect(int vertex1, int vertex2, int weight){
 	Edge *e = vertices[vertex1].AddEdge(vertex2, weight);
 	edges.push_back(*e);
+}
+
+void Graph::SetupAdjacencyMatrix(){
+	//First index should be source vertex, second should be destination vertex
+	adjacencyMatrix = new int*[vertexCount];
+	for (int i = 0; i < vertexCount; i++){
+		adjacencyMatrix[i] = new int[vertexCount];
+		for (int j = 0; j < vertexCount; j++){
+			adjacencyMatrix[i][j] = 0;
+		}
+	}
 }

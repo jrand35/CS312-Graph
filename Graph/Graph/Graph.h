@@ -19,10 +19,13 @@ public:
 	bool Prim(int startingVertex);
 	bool Kruskal();
 	string GetEdgeWeights();
+	void MarkAllVertices(bool mark);
 private:
+	int **adjacencyMatrix;
 	Vertex vertices[MAX_VERTICES];
 	list<Edge> edges;
 	int vertexCount;
 	void AddVertex(int index, int x, int y);
 	void Connect(int vertex1, int vertex2, int weight);
+	void SetupAdjacencyMatrix();
 };
