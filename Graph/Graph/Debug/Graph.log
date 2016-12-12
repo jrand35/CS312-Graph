@@ -1,0 +1,17 @@
+﻿  GraphForm.cpp
+k:\github\cs312-graph\graph\graph\GraphForm.h(302): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+k:\github\cs312-graph\graph\graph\GraphForm.h(304): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+k:\github\cs312-graph\graph\graph\GraphForm.h(305): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+k:\github\cs312-graph\graph\graph\GraphForm.h(306): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+k:\github\cs312-graph\graph\graph\GraphForm.h(307): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+  Main.cpp
+k:\github\cs312-graph\graph\graph\GraphForm.h(302): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+k:\github\cs312-graph\graph\graph\GraphForm.h(304): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+k:\github\cs312-graph\graph\graph\GraphForm.h(305): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+k:\github\cs312-graph\graph\graph\GraphForm.h(306): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+k:\github\cs312-graph\graph\graph\GraphForm.h(307): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+  Generating Code...
+  .NETFramework,Version=v4.0.AssemblyAttributes.cpp
+  Graph.obj : /DEBUG:FASTLINK is not supported when managed code is present; restarting link with /DEBUG:FULL
+  Graph.vcxproj -> K:\Github\CS312-Graph\Graph\Debug\Graph.exe
+  Graph.vcxproj -> K:\Github\CS312-Graph\Graph\Debug\Graph.pdb (Partial PDB)

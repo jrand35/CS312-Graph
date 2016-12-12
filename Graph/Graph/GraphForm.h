@@ -118,7 +118,7 @@ namespace GraphProject {
 		Graphics ^g;
 		Pen ^edgePen;
 		Pen ^edgePen2;
-		array<Label^>^ labels;
+		cli::array<Label^>^ labels;
 
 
 		Graph *graph;
@@ -276,7 +276,7 @@ namespace GraphProject {
 		graph = new Graph();
 		graph->LoadVertices("Acyclic Graph Vertices.txt");
 		graph->LoadEdges("Acyclic Graph Edges.txt");
-		labels = gcnew array<Label^>(graph->VertexCount());
+		labels = gcnew cli::array<Label^>(graph->VertexCount());
 		//Debugging->Text = gcnew String(graph->GetEdgeWeights().c_str());
 		Debugging->Text = graph->CheckIsConnected().ToString();
 		int labelCount = 0;
