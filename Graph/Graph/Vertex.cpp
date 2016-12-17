@@ -1,95 +1,100 @@
 #include "Vertex.h"
 
-Vertex::Vertex(){
+template<class T>
+Vertex<T>::Vertex(){
 	marked = false;
 	visited = false;
 	index = 0;
-	x = 0;
-	y = 0;
+	//type =
 	edgeCount = 0;
 }
 
-Vertex::Vertex(int index, int x, int y) {
+template<class T>
+Vertex<T>::Vertex(int index, T type) {
 	marked = false;
 	visited = false;
 	Vertex::index = index;
-	Vertex::x = x;
-	Vertex::y = y;
+	Vertex::type = type;
 	edgeCount = 0;
 }
 
-Vertex::~Vertex(){
+template<class T>
+Vertex<T>::~Vertex(){
 
 }
 
-void Vertex::Set(int index, int x, int y){
+template<class T>
+void Vertex<T>::Set(int index, T type){
 	marked = false;
 	visited = false;
 	Vertex::index = index;
-	Vertex::x = x;
-	Vertex::y = y;
+	Vertex::type = type;
 }
 
 //TODO: Should sort all edges after insertions
-Edge *Vertex::AddEdge(int otherVertex, int weight) {
-	edges[edgeCount].vertexIndex = index;
-	edges[edgeCount].DestVertexIndex = otherVertex;
-	edges[edgeCount].Weight = weight;
-	edges[edgeCount].Marked = false;
-	edges[edgeCount].Visited = false;
-	edgeCount++;
-	return &edges[edgeCount - 1];
-}
+//Edge *Vertex::AddEdge(int otherVertex, int weight) {
+//	edges[edgeCount].vertexIndex = index;
+//	edges[edgeCount].DestVertexIndex = otherVertex;
+//	edges[edgeCount].Weight = weight;
+//	edges[edgeCount].Marked = false;
+//	edges[edgeCount].Visited = false;
+//	edgeCount++;
+//	return &edges[edgeCount - 1];
+//}
 
-void Vertex::Mark(bool mark){
+template<class T>
+void Vertex<T>::Mark(bool mark){
 	marked = mark;
 }
 
-void Vertex::Visit(bool mark){
+template<class T>
+void Vertex<T>::Visit(bool mark){
 	visited = mark;
 }
 
-bool Vertex::IsMarked() const{
+template<class T>
+bool Vertex<T>::IsMarked() const{
 	return marked;
 }
 
-bool Vertex::IsVisited() const{
+template<class T>
+bool Vertex<T>::IsVisited() const{
 	return visited;
 }
 
-int Vertex::GetIndex() const
+template<class T>
+int Vertex<T>::GetIndex() const
 {
 	return index;
 }
 
-int Vertex::GetX() const{
-	return x;
+template<class T>
+T Vertex<T>::GetT() const{
+	return type;
 }
 
-int Vertex::GetY() const{
-	return y;
-}
+//template<class T>
+//int Vertex::EdgeCount() const{
+//	return edgeCount;
+//}
 
-int Vertex::EdgeCount() const{
-	return edgeCount;
-}
+//template<class T>
+//Edge *Vertex::GetEdge(int index){
+//	return (edges + index);
+//}
 
-Edge *Vertex::GetEdge(int index){
-	return (edges + index);
-}
-
-bool Edge::operator<(Edge &other){
-	return Weight < other.Weight;
-}
-bool Edge::operator>(Edge &other){
-	return Weight > other.Weight;
-}
-bool Edge::operator==(Edge &other){
-	return Weight == other.Weight;
-}
-bool Edge::operator<=(Edge &other){
-	return Weight <= other.Weight;
-}
-bool Edge::operator>=(Edge &other){
-	return Weight >= other.Weight;
-}
+//bool Edge::operator<(Edge &other){
+//	return Weight < other.Weight;
+//}
+//bool Edge::operator>(Edge &other){
+//	return Weight > other.Weight;
+//}
+//bool Edge::operator==(Edge &other){
+//	return Weight == other.Weight;
+//}
+//bool Edge::operator<=(Edge &other){
+//	return Weight <= other.Weight;
+//}
+//bool Edge::operator>=(Edge &other){
+//	return Weight >= other.Weight;
+//}

@@ -8,15 +8,30 @@ using namespace System;
 
 const int MAX_VERTICES = 50;
 
+struct Edge {
+	int Weight;
+	int vertexIndex;
+	int DestVertexIndex;
+	bool Marked;
+	bool Visited;
+	bool operator<(Edge &other);
+	bool operator>(Edge &other);
+	bool operator==(Edge &other);
+	bool operator<=(Edge &other);
+	bool operator>=(Edge &other);
+};
+
+template<class T>
 class Graph {
 public:
 	Graph();
-	Graph(bool randomize, int vertices);
 	~Graph();
-	void LoadVertices(string filename);
+	void SetupMatrices();
 	void LoadEdges(string filename);
 	int VertexCount() const;
-	Vertex *GetVertex(int index);
+	void AddVertex(int index, T type);
+	Vertex<T> *GetVertex(int index);
+	int GetEdgeWeight(int vertex1, int vertex2);
 	//Fix, Prim and Kruskal should ignore directions
 	void Prim(int vertex);
 	void Kruskal();
@@ -26,16 +41,14 @@ public:
 	void MarkEntireGraph(bool mark);
 	void VisitEntireGraph(bool mark);
 	bool CheckIsConnected();
-	void HasCycle(Vertex *startVertex, bool &result);
+	void HasCycle(Vertex<T> *startVertex, bool &result);
 private:
 	int **adjacencyMatrix;
-	Vertex vertices[MAX_VERTICES];
-	list<Edge*> edges;
+	bool **edgeMarkedMatrix;
+	Vertex<T> vertices[MAX_VERTICES];
 	list<Edge*> spanningTreeEdges;
 	int treeEdgeCount;
 	int vertexCount;
 	void PrimStep();
-	void AddVertex(int index, int x, int y);
 	void Connect(int vertex1, int vertex2, int weight);
-	void SetupAdjacencyMatrix();
 };

@@ -1,49 +1,36 @@
 #include "Graph.h"
 
-Graph::Graph(){
+template<class T>
+Graph<T>::Graph(){
 	vertexCount = 0;
 	treeEdgeCount = 0;
 }
 
-Graph::Graph(bool randomize, int vertices){
-	vertexCount = 0;
-	treeEdgeCount = 0;
-	if (randomize){
-
-	}
-}
-
-Graph::~Graph(){
+template<class T>
+Graph<T>::~Graph(){
 	for (int i = 0; i < vertexCount; i++){
 		delete[] adjacencyMatrix[i];
 	}
 	delete[] adjacencyMatrix;
 }
 
-void Graph::LoadVertices(string filename){
-	ifstream file;
-	file.open(filename);
-	if (file.fail()){
-		file.close();
-		System::Windows::Forms::Application::Exit();
-	}
-	while (!file.eof()){
-		string n, x, y;
-		file >> n >> x >> y;
-		if (n == "")
-			continue;
-		else if (n[0] == 'T'){
-			//May not be used
-			continue;
-		}
-		else{
-			AddVertex(stoi(n), stoi(x), stoi(y));
+template<class T>
+void Graph<T>::SetupMatrices(){
+	//First index should be source vertex, second should be destination vertex
+	adjacencyMatrix = new int*[vertexCount];
+	edgeMarkedMatrix = new bool*[vertexCount];
+	for (int i = 0; i < vertexCount; i++){
+		adjacencyMatrix[i] = new int[vertexCount];
+		edgeMarkedMatrix[i] = new bool[vertexCount];
+		for (int j = 0; j < vertexCount; j++){
+			adjacencyMatrix[i][j] = 0;
+			edgeMarkedMatrix[i][j] = false;
 		}
 	}
-	file.close();
 }
 
-void Graph::LoadEdges(string filename){
+template<class T>
+void Graph<T>::LoadEdges(string filename){
 	ifstream file;
 	file.open(filename);
 	if (file.fail()) {
@@ -55,23 +42,35 @@ void Graph::LoadEdges(string filename){
 		file >> n1 >> n2 >> w;
 		if (n1 != "" && n1 != "Vertex")
 		{
-			Connect(stoi(n1), stoi(n2), stoi(w));
+			adjacencyMatrix[n1][n2] = w;
 		}
 	}
 	file.close();
-	edges.sort();
-	SetupAdjacencyMatrix();
 }
 
-int Graph::VertexCount() const{
+template<class T>
+int Graph<T>::VertexCount() const{
 	return vertexCount;
 }
 
-Vertex *Graph::GetVertex(int index) {
+template<class T>
+void Graph<T>::AddVertex(int index, T type){
+	vertices[vertexCount].Set(index, type);
+	vertexCount++;
+}
+
+template<class T>
+Vertex<T> *Graph<T>::GetVertex(int index) {
 	return &vertices[index];
 }
 
-void Graph::Prim(int vertex){
+template<class T>
+int Graph<T>::GetEdgeWeight(int vertex1, int vertex2){
+	return adjacencyMatrix[vertex1][vertex2];
+}
+
+template<class T>
+void Graph<T>::Prim(int vertex){
 	spanningTreeEdges.clear();
 	treeEdgeCount = 0;
 	if (vertices[vertex].IsMarked()){
@@ -86,7 +85,8 @@ void Graph::Prim(int vertex){
 	PrimStep();
 }
 
-void Graph::PrimStep(){
+template<class T>
+void Graph<T>::PrimStep(){
 	list<Edge*>::iterator it;
 	Edge *smallestEdge = nullptr;
 	Vertex *v = nullptr;
@@ -115,7 +115,8 @@ void Graph::PrimStep(){
 	}
 }
 
-void Graph::Kruskal(){
+template<class T>
+void Graph<T>::Kruskal(){
 	list<Edge*>::iterator it;
 	for (it = edges.begin(); it != edges.end(); it++){
 		(*it)->Marked = true;
@@ -132,8 +133,8 @@ void Graph::Kruskal(){
 	}
 }
 
-//Works
-void Graph::DepthFirstSearch(int vertex, String ^&result){
+template<class T>
+void Graph<T>::DepthFirstSearch(int vertex, String ^&result){
 	if (vertices[vertex].IsVisited())
 		return;
 
@@ -144,7 +145,8 @@ void Graph::DepthFirstSearch(int vertex, String ^&result){
 	}
 }
 
-void Graph::BreadthFirstSearch(int vertex, String ^&result){
+template<class T>
+void Graph<T>::BreadthFirstSearch(int vertex, String ^&result){
 	if (vertices[vertex].IsVisited())
 		return;
 
@@ -160,7 +162,8 @@ void Graph::BreadthFirstSearch(int vertex, String ^&result){
 	}
 }
 
-string Graph::GetEdgeWeights(){
+template<class T>
+string Graph<T>::GetEdgeWeights(){
 	list<Edge*>::iterator it;
 	string str = "";
 	for (it = edges.begin(); it != edges.end(); it++){
@@ -169,7 +172,8 @@ string Graph::GetEdgeWeights(){
 	return str;
 }
 
-void Graph::MarkEntireGraph(bool mark){
+template<class T>
+void Graph<T>::MarkEntireGraph(bool mark){
 	for (int i = 0; i < vertexCount; i++){
 		vertices[i].Mark(mark);
 	}
@@ -178,7 +182,8 @@ void Graph::MarkEntireGraph(bool mark){
 	}
 }
 
-void Graph::VisitEntireGraph(bool mark){
+template<class T>
+void Graph<T>::VisitEntireGraph(bool mark){
 	for (int i = 0; i < vertexCount; i++){
 		vertices[i].Visit(mark);
 	}
@@ -187,7 +192,8 @@ void Graph::VisitEntireGraph(bool mark){
 	}
 }
 
-bool Graph::CheckIsConnected() {
+template<class T>
+bool Graph<T>::CheckIsConnected() {
 	bool connected = false;
 	for (int i = 0; i < vertexCount; i++){
 		connected = false;
@@ -203,7 +209,8 @@ bool Graph::CheckIsConnected() {
 	return true;
 }
 
-void Graph::HasCycle(Vertex *vertex, bool &result) {
+template<class T>
+void Graph<T>::HasCycle(Vertex<T> *vertex, bool &result) {
 	if (vertex->IsVisited()){
 		result = true;
 		return;
@@ -217,30 +224,23 @@ void Graph::HasCycle(Vertex *vertex, bool &result) {
 	}
 }
 
-void Graph::AddVertex(int index, int x, int y){
-	vertices[vertexCount].Set(index, x, y);
-	vertexCount++;
+template<class T>
+void Graph<T>::Connect(int vertex1, int vertex2, int weight){
+
 }
 
-void Graph::Connect(int vertex1, int vertex2, int weight){
-	Edge *e = vertices[vertex1].AddEdge(vertex2, weight);
-	edges.push_back(e);
+bool Edge::operator<(Edge &other){
+	return Weight < other.Weight;
 }
-
-void Graph::SetupAdjacencyMatrix(){
-	//First index should be source vertex, second should be destination vertex
-	adjacencyMatrix = new int*[vertexCount];
-	for (int i = 0; i < vertexCount; i++){
-		adjacencyMatrix[i] = new int[vertexCount];
-		for (int j = 0; j < vertexCount; j++){
-			adjacencyMatrix[i][j] = 0;
-		}
-	}
-
-	for (int i = 0; i < vertexCount; i++){
-		for (int j = 0; j < vertices[i].EdgeCount(); j++){
-			Edge *e = vertices[i].GetEdge(j);
-			adjacencyMatrix[i][e->DestVertexIndex] = e->Weight;
-		}
-	}
+bool Edge::operator>(Edge &other){
+	return Weight > other.Weight;
+}
+bool Edge::operator==(Edge &other){
+	return Weight == other.Weight;
+}
+bool Edge::operator<=(Edge &other){
+	return Weight <= other.Weight;
+}
+bool Edge::operator>=(Edge &other){
+	return Weight >= other.Weight;
 }

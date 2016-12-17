@@ -117,6 +117,33 @@ namespace GraphProject {
 				}
 			}
 		}
+
+		void LoadVertices(Graph<Pos>* g, string filename){
+			ifstream file;
+			file.open(filename);
+			if (file.fail()){
+				file.close();
+				System::Windows::Forms::Application::Exit();
+			}
+			while (!file.eof()){
+				string n, x, y;
+				file >> n >> x >> y;
+				if (n == "")
+					continue;
+				else if (n[0] == 'T'){
+					//May not be used
+					continue;
+				}
+				else{
+					Pos p;
+					p.X = stoi(x);
+					p.Y = stoi(y);
+					g->AddVertex(stoi(n), p);
+				}
+			}
+			file.close();
+			g->SetupMatrices();
+		}
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -128,7 +155,7 @@ namespace GraphProject {
 		cli::array<Label^>^ labels;
 
 
-		Graph *graph;
+		Graph<Pos> *graph;
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -336,8 +363,8 @@ namespace GraphProject {
 		edgePen->EndCap = Drawing2D::LineCap::ArrowAnchor;
 		edgePen2 = gcnew Pen(Color::Blue, 6);
 		edgePen2->EndCap = Drawing2D::LineCap::ArrowAnchor;
-		graph = new Graph();
-		graph->LoadVertices("Small Graph Vertices.txt");
+		graph = new Graph<Pos>();
+		LoadVertices(graph, "Small Graph Vertices.txt");
 		graph->LoadEdges("Small Graph Edges.txt");
 		labels = gcnew cli::array<Label^>(graph->VertexCount());
 		//Debugging->Text = gcnew String(graph->GetEdgeWeights().c_str());
@@ -346,22 +373,40 @@ namespace GraphProject {
 
 		g = panel1->CreateGraphics();
 
+		//Display edge weights
+		//O(n^2)
 		for (int i = 0; i < graph->VertexCount(); i++){
-			Label^ l = newLabel(i.ToString(), graph->GetVertex(i)->GetX(), graph->GetVertex(i)->GetY());
+			Label^ l = newLabel(i.ToString(), graph->GetVertex(i)->GetT().X, graph->GetVertex(i)->GetT().Y);
 			labels[labelCount++] = l;
+
+			for (int j = 0; j < graph->VertexCount(); j++){
+				int w = graph->GetEdgeWeight(i, j);
+				if (w == 0)
+					continue;
+				Pos p1 = graph->GetVertex(i)->GetT();
+				Pos p2 = graph->GetVertex(j)->GetT();
+				int x1 = p1.X;
+				int y1 = p1.Y;
+				int x2 = p2.X;
+				int y2 = p2.Y;
+				Point center = Point(x1 + (x2 - x1) / 2, y1 + (y2 - y1) / 2);
+				newLabel2(w.ToString(), center.X + 8, center.Y + 8);
+			}
 		}
-		//TODO: Add edge weights
 	}
 	private: System::Void panel1_Paint(System::Object^  sender, System::Windows::Forms::PaintEventArgs^  e) {
+		//Display edges
 		for (int i = 0; i < graph->VertexCount(); i++){
-			for (int j = 0; j < graph->GetVertex(i)->EdgeCount(); j++){
-				Vertex *v1 = graph->GetVertex(i);
-				int v2Index = v1->GetEdge(j)->DestVertexIndex;
-				Vertex *v2 = graph->GetVertex(v2Index);
-				int x1_ = v1->GetX();
-				int y1_ = v1->GetY();
-				int x2_ = v2->GetX();
-				int y2_ = v2->GetY();
+			for (int j = 0; j < graph->VertexCount(); j++){
+				int w = graph->GetEdgeWeight(i, j);
+				if (w == 0)
+					continue;
+				Vertex<Pos> *v1 = graph->GetVertex(i);
+				Vertex<Pos> *v2 = graph->GetVertex(j);
+				int x1_ = v1->GetT().X;
+				int y1_ = v1->GetT().Y;
+				int x2_ = v2->GetT().X;
+				int y2_ = v2->GetT().Y;
 
 				float direction = Math::Atan2(y2_ - y1_, x2_ - x1_);
 
@@ -370,12 +415,13 @@ namespace GraphProject {
 				int x2 = x2_ - (ARROW_OFFSET * Math::Cos(direction));
 				int y2 = y2_ - (ARROW_OFFSET * Math::Sin(direction));
 
-				if (!v1->GetEdge(j)->Marked){
-					g->DrawLine(edgePen, x1 + 16, y1 + 16, x2 + 16, y2 + 16);
-				}
-				else{
-					g->DrawLine(edgePen2, x1 + 16, y1 + 16, x2 + 16, y2 + 16);
-				}
+				//TODO: Handle drawing marked edges
+				//if (!v1->GetEdge(j)->Marked){
+				//	g->DrawLine(edgePen, x1 + 16, y1 + 16, x2 + 16, y2 + 16);
+				//}
+				//else{
+				//	g->DrawLine(edgePen2, x1 + 16, y1 + 16, x2 + 16, y2 + 16);
+				//}
 			}
 		}
 	}
