@@ -178,6 +178,7 @@ namespace GraphProject {
 			this->kruskalButton->TabIndex = 3;
 			this->kruskalButton->Text = L"Kruskal\'s Algorithm";
 			this->kruskalButton->UseVisualStyleBackColor = true;
+			this->kruskalButton->Click += gcnew System::EventHandler(this, &GraphForm::kruskalButton_Click);
 			// 
 			// label2
 			// 
@@ -278,7 +279,9 @@ namespace GraphProject {
 		graph->LoadEdges("Acyclic Graph Edges.txt");
 		labels = gcnew cli::array<Label^>(graph->VertexCount());
 		//Debugging->Text = gcnew String(graph->GetEdgeWeights().c_str());
-		Debugging->Text = graph->CheckIsConnected().ToString();
+		bool result = false;
+		graph->HasCycle(graph->GetVertex(0), result);
+		Debugging->Text = result.ToString();
 		int labelCount = 0;
 
 		g = panel1->CreateGraphics();
@@ -330,5 +333,10 @@ namespace GraphProject {
 		UpdateLabels();
 		panel1->Refresh();
 	}
+private: System::Void kruskalButton_Click(System::Object^  sender, System::EventArgs^  e) {
+	graph->Kruskal();
+	UpdateLabels();
+	panel1->Refresh();
+}
 };
 }

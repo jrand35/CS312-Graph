@@ -115,8 +115,21 @@ void Graph::PrimStep(){
 	}
 }
 
-bool Graph::Kruskal(){
-	return true;
+void Graph::Kruskal(){
+	list<Edge*>::iterator it;
+	for (it = edges.begin(); it != edges.end(); it++){
+		(*it)->Marked = true;
+		bool result = false;
+		HasCycle(&vertices[(*it)->vertexIndex], result);
+		if (result){
+			(*it)->Marked = false;
+		}
+		if ((*it)->Marked){
+			vertices[(*it)->vertexIndex].Mark(true);
+			vertices[(*it)->DestVertexIndex].Mark(true);
+		}
+		VisitEntireGraph(false);
+	}
 }
 
 string Graph::GetEdgeWeights(){
@@ -137,6 +150,15 @@ void Graph::MarkEntireGraph(bool mark){
 	}
 }
 
+void Graph::VisitEntireGraph(bool mark){
+	for (int i = 0; i < vertexCount; i++){
+		vertices[i].Visit(mark);
+	}
+	for (list<Edge*>::iterator it = edges.begin(); it != edges.end(); it++){
+		(*it)->Visited = mark;
+	}
+}
+
 bool Graph::CheckIsConnected() {
 	bool connected = false;
 	for (int i = 0; i < vertexCount; i++){
@@ -151,6 +173,20 @@ bool Graph::CheckIsConnected() {
 			return false;
 	}
 	return true;
+}
+
+void Graph::HasCycle(Vertex *vertex, bool &result) {
+	if (vertex->IsVisited()){
+		result = true;
+		return;
+	}
+	vertex->Visit(true);
+	for (int i = 0; i < vertex->EdgeCount(); i++){
+		if (!vertex->GetEdge(i)->Visited && vertex->GetEdge(i)->Marked){
+			vertex->GetEdge(i)->Visited = true;
+			HasCycle(&vertices[vertex->GetEdge(i)->DestVertexIndex], result);
+		}
+	}
 }
 
 void Graph::AddVertex(int index, int x, int y){

@@ -17,10 +17,12 @@ public:
 	int VertexCount() const;
 	Vertex *GetVertex(int index);
 	void Prim(int vertex);
-	bool Kruskal();
+	void Kruskal();
 	string GetEdgeWeights();
 	void MarkEntireGraph(bool mark);
+	void VisitEntireGraph(bool mark);
 	bool CheckIsConnected();
+	void HasCycle(Vertex *startVertex, bool &result);
 private:
 	int **adjacencyMatrix;
 	Vertex vertices[MAX_VERTICES];

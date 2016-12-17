@@ -2,6 +2,7 @@
 
 Vertex::Vertex(){
 	marked = false;
+	visited = false;
 	index = 0;
 	x = 0;
 	y = 0;
@@ -10,6 +11,7 @@ Vertex::Vertex(){
 
 Vertex::Vertex(int index, int x, int y) {
 	marked = false;
+	visited = false;
 	Vertex::index = index;
 	Vertex::x = x;
 	Vertex::y = y;
@@ -27,9 +29,11 @@ void Vertex::Set(int index, int x, int y){
 }
 
 Edge *Vertex::AddEdge(int otherVertex, int weight) {
+	edges[edgeCount].vertexIndex = index;
 	edges[edgeCount].DestVertexIndex = otherVertex;
 	edges[edgeCount].Weight = weight;
 	edges[edgeCount].Marked = false;
+	edges[edgeCount].Visited = false;
 	edgeCount++;
 	return &edges[edgeCount - 1];
 }
@@ -38,8 +42,16 @@ void Vertex::Mark(bool mark){
 	marked = mark;
 }
 
+void Vertex::Visit(bool mark){
+	visited = mark;
+}
+
 bool Vertex::IsMarked() const{
 	return marked;
+}
+
+bool Vertex::IsVisited() const{
+	return visited;
 }
 
 int Vertex::GetIndex() const
