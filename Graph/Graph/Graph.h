@@ -4,6 +4,7 @@
 #include <fstream>
 #include <list>
 using namespace std;
+using namespace System;
 
 const int MAX_VERTICES = 50;
 
@@ -16,8 +17,11 @@ public:
 	void LoadEdges(string filename);
 	int VertexCount() const;
 	Vertex *GetVertex(int index);
+	//Fix, Prim and Kruskal should ignore directions
 	void Prim(int vertex);
 	void Kruskal();
+	void DepthFirstSearch(int vertex, String ^&result);
+	void BreadthFirstSearch(int vertex, String ^&result);
 	string GetEdgeWeights();
 	void MarkEntireGraph(bool mark);
 	void VisitEntireGraph(bool mark);

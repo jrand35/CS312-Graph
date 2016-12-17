@@ -132,6 +132,34 @@ void Graph::Kruskal(){
 	}
 }
 
+//Works
+void Graph::DepthFirstSearch(int vertex, String ^&result){
+	if (vertices[vertex].IsVisited())
+		return;
+
+	vertices[vertex].Visit(true);
+	result += vertices[vertex].GetIndex().ToString() + " ";
+	for (int i = 0; i < vertices[vertex].EdgeCount(); i++){
+		DepthFirstSearch(vertices[vertex].GetEdge(i)->DestVertexIndex, result);
+	}
+}
+
+void Graph::BreadthFirstSearch(int vertex, String ^&result){
+	if (vertices[vertex].IsVisited())
+		return;
+
+	vertices[vertex].Visit(true);
+	for (int i = 0; i < vertices[vertex].EdgeCount(); i++){
+		if (!vertices[vertices[vertex].GetEdge(i)->DestVertexIndex].IsMarked()){
+			result += vertices[vertex].GetEdge(i)->DestVertexIndex.ToString() + " ";
+			vertices[vertices[vertex].GetEdge(i)->DestVertexIndex].Mark(true);
+		}
+	}
+	for (int i = 0; i < vertices[vertex].EdgeCount(); i++){
+		BreadthFirstSearch(vertices[vertex].GetEdge(i)->DestVertexIndex, result);
+	}
+}
+
 string Graph::GetEdgeWeights(){
 	list<Edge*>::iterator it;
 	string str = "";

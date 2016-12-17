@@ -23,11 +23,14 @@ Vertex::~Vertex(){
 }
 
 void Vertex::Set(int index, int x, int y){
+	marked = false;
+	visited = false;
 	Vertex::index = index;
 	Vertex::x = x;
 	Vertex::y = y;
 }
 
+//TODO: Should sort all edges after insertions
 Edge *Vertex::AddEdge(int otherVertex, int weight) {
 	edges[edgeCount].vertexIndex = index;
 	edges[edgeCount].DestVertexIndex = otherVertex;

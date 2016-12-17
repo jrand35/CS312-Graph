@@ -53,6 +53,13 @@ namespace GraphProject {
 	private: System::Windows::Forms::Label^  Debugging;
 	private: System::Windows::Forms::Label^  label4;
 	private: System::Windows::Forms::Button^  resetButton;
+	private: System::Windows::Forms::Button^  breadthButton;
+	private: System::Windows::Forms::Button^  depthButton;
+	private: System::Windows::Forms::Label^  label5;
+	private: System::Windows::Forms::TextBox^  searchVertexBox;
+	private: System::Windows::Forms::Label^  SearchLabel;
+
+
 
 	private: System::Windows::Forms::Panel^  panel1;
 	protected:
@@ -141,6 +148,11 @@ namespace GraphProject {
 			this->Debugging = (gcnew System::Windows::Forms::Label());
 			this->label4 = (gcnew System::Windows::Forms::Label());
 			this->resetButton = (gcnew System::Windows::Forms::Button());
+			this->breadthButton = (gcnew System::Windows::Forms::Button());
+			this->depthButton = (gcnew System::Windows::Forms::Button());
+			this->label5 = (gcnew System::Windows::Forms::Label());
+			this->searchVertexBox = (gcnew System::Windows::Forms::TextBox());
+			this->SearchLabel = (gcnew System::Windows::Forms::Label());
 			this->SuspendLayout();
 			// 
 			// panel1
@@ -244,15 +256,65 @@ namespace GraphProject {
 			this->resetButton->UseVisualStyleBackColor = true;
 			this->resetButton->Click += gcnew System::EventHandler(this, &GraphForm::resetButton_Click);
 			// 
+			// breadthButton
+			// 
+			this->breadthButton->Location = System::Drawing::Point(885, 639);
+			this->breadthButton->Name = L"breadthButton";
+			this->breadthButton->Size = System::Drawing::Size(109, 23);
+			this->breadthButton->TabIndex = 11;
+			this->breadthButton->Text = L"Breadth-first Search";
+			this->breadthButton->UseVisualStyleBackColor = true;
+			this->breadthButton->Click += gcnew System::EventHandler(this, &GraphForm::breadthButton_Click);
+			// 
+			// depthButton
+			// 
+			this->depthButton->Location = System::Drawing::Point(885, 610);
+			this->depthButton->Name = L"depthButton";
+			this->depthButton->Size = System::Drawing::Size(109, 23);
+			this->depthButton->TabIndex = 12;
+			this->depthButton->Text = L"Depth-first Search";
+			this->depthButton->UseVisualStyleBackColor = true;
+			this->depthButton->Click += gcnew System::EventHandler(this, &GraphForm::depthButton_Click);
+			// 
+			// label5
+			// 
+			this->label5->AutoSize = true;
+			this->label5->Location = System::Drawing::Point(874, 587);
+			this->label5->Name = L"label5";
+			this->label5->Size = System::Drawing::Size(76, 13);
+			this->label5->TabIndex = 7;
+			this->label5->Text = L"Starting Vertex";
+			// 
+			// searchVertexBox
+			// 
+			this->searchVertexBox->Location = System::Drawing::Point(957, 584);
+			this->searchVertexBox->MaxLength = 2;
+			this->searchVertexBox->Name = L"searchVertexBox";
+			this->searchVertexBox->Size = System::Drawing::Size(37, 20);
+			this->searchVertexBox->TabIndex = 6;
+			// 
+			// SearchLabel
+			// 
+			this->SearchLabel->BackColor = System::Drawing::SystemColors::ButtonHighlight;
+			this->SearchLabel->Location = System::Drawing::Point(801, 685);
+			this->SearchLabel->Name = L"SearchLabel";
+			this->SearchLabel->Size = System::Drawing::Size(193, 65);
+			this->SearchLabel->TabIndex = 13;
+			// 
 			// GraphForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(1006, 762);
+			this->Controls->Add(this->SearchLabel);
+			this->Controls->Add(this->depthButton);
+			this->Controls->Add(this->breadthButton);
 			this->Controls->Add(this->resetButton);
 			this->Controls->Add(this->label4);
 			this->Controls->Add(this->Debugging);
+			this->Controls->Add(this->label5);
 			this->Controls->Add(this->label3);
+			this->Controls->Add(this->searchVertexBox);
 			this->Controls->Add(this->vertexBox);
 			this->Controls->Add(this->dijkstraButton);
 			this->Controls->Add(this->label2);
@@ -275,13 +337,11 @@ namespace GraphProject {
 		edgePen2 = gcnew Pen(Color::Blue, 6);
 		edgePen2->EndCap = Drawing2D::LineCap::ArrowAnchor;
 		graph = new Graph();
-		graph->LoadVertices("Acyclic Graph Vertices.txt");
-		graph->LoadEdges("Acyclic Graph Edges.txt");
+		graph->LoadVertices("Small Graph Vertices.txt");
+		graph->LoadEdges("Small Graph Edges.txt");
 		labels = gcnew cli::array<Label^>(graph->VertexCount());
 		//Debugging->Text = gcnew String(graph->GetEdgeWeights().c_str());
 		bool result = false;
-		graph->HasCycle(graph->GetVertex(0), result);
-		Debugging->Text = result.ToString();
 		int labelCount = 0;
 
 		g = panel1->CreateGraphics();
@@ -290,6 +350,7 @@ namespace GraphProject {
 			Label^ l = newLabel(i.ToString(), graph->GetVertex(i)->GetX(), graph->GetVertex(i)->GetY());
 			labels[labelCount++] = l;
 		}
+		//TODO: Add edge weights
 	}
 	private: System::Void panel1_Paint(System::Object^  sender, System::Windows::Forms::PaintEventArgs^  e) {
 		for (int i = 0; i < graph->VertexCount(); i++){
@@ -319,9 +380,10 @@ namespace GraphProject {
 		}
 	}
 	private: System::Void primButton_Click(System::Object^  sender, System::EventArgs^  e) {
+		graph->MarkEntireGraph(false);
 		int num = -1;
 		bool result = int::TryParse(vertexBox->Text, num);
-		if (!result || num < 0 || num > graph->VertexCount())
+		if (!result || num < 0 || num >= graph->VertexCount())
 			return;
 
 		graph->Prim(num);
@@ -334,9 +396,39 @@ namespace GraphProject {
 		panel1->Refresh();
 	}
 private: System::Void kruskalButton_Click(System::Object^  sender, System::EventArgs^  e) {
+	graph->MarkEntireGraph(false);
 	graph->Kruskal();
 	UpdateLabels();
 	panel1->Refresh();
+}
+private: System::Void depthButton_Click(System::Object^  sender, System::EventArgs^  e) {
+	int num = -1;
+	String ^result = gcnew String("");
+	bool success = int::TryParse(searchVertexBox->Text, num);
+	if (!success || num < 0 || num >= graph->VertexCount())
+		return;
+
+	graph->DepthFirstSearch(num, result);
+
+	SearchLabel->Text = result;
+	
+	graph->VisitEntireGraph(false);
+}
+private: System::Void breadthButton_Click(System::Object^  sender, System::EventArgs^  e) {
+	int num = -1;
+	bool success = int::TryParse(searchVertexBox->Text, num);
+	if (!success || num < 0 || num >= graph->VertexCount())
+		return;
+
+	String ^result = gcnew String(num + " ");
+	graph->GetVertex(num)->Mark(true);
+
+	graph->BreadthFirstSearch(num, result);
+
+	SearchLabel->Text = result;
+
+	graph->VisitEntireGraph(false);
+	graph->MarkEntireGraph(false);
 }
 };
 }
