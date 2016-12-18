@@ -1,5 +1,6 @@
 #pragma once
 #include "Graph.h"
+#include "Pos.h"
 
 const int ARROW_OFFSET = 30;
 
@@ -155,7 +156,7 @@ namespace GraphProject {
 		cli::array<Label^>^ labels;
 
 
-		Graph<Pos> *graph;
+		Graph<Pos> *graph = nullptr;
 
 #pragma region Windows Form Designer generated code
 		/// <summary>

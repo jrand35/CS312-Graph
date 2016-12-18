@@ -45,10 +45,13 @@ public:
 private:
 	int **adjacencyMatrix;
 	bool **edgeMarkedMatrix;
+	bool **edgeVisitedMatrix;
 	Vertex<T> vertices[MAX_VERTICES];
-	list<Edge*> spanningTreeEdges;
+	list<Edge> spanningTreeEdges;
 	int treeEdgeCount;
 	int vertexCount;
 	void PrimStep();
-	void Connect(int vertex1, int vertex2, int weight);
+	list<Edge> GetSortedEdges();
 };
+
+#include "Graph.template"

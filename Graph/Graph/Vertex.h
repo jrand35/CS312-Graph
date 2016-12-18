@@ -1,11 +1,5 @@
 #pragma once
-
 const int MAX_EDGES = 20;
-
-struct Pos{
-	int X;
-	int Y;
-};
 
 template<class T>
 class Vertex {

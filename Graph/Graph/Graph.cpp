@@ -19,12 +19,15 @@ void Graph<T>::SetupMatrices(){
 	//First index should be source vertex, second should be destination vertex
 	adjacencyMatrix = new int*[vertexCount];
 	edgeMarkedMatrix = new bool*[vertexCount];
+	edgeVisitedMatrix = new bool*[vertexCount];
 	for (int i = 0; i < vertexCount; i++){
 		adjacencyMatrix[i] = new int[vertexCount];
 		edgeMarkedMatrix[i] = new bool[vertexCount];
+		edgeVisitedMatrix[i] = new bool[vertexCount];
 		for (int j = 0; j < vertexCount; j++){
 			adjacencyMatrix[i][j] = 0;
 			edgeMarkedMatrix[i][j] = false;
+			edgeVisitedMatrix[i][j] = false;
 		}
 	}
 }
@@ -177,8 +180,10 @@ void Graph<T>::MarkEntireGraph(bool mark){
 	for (int i = 0; i < vertexCount; i++){
 		vertices[i].Mark(mark);
 	}
-	for (list<Edge*>::iterator it = edges.begin(); it != edges.end(); it++){
-		(*it)->Marked = mark;
+	for (int i = 0; i < vertexCount; i++){
+		for (int j = 0; j < vertexCount; j++){
+			edgeMarkedMatrix[i][j] = false;
+		}
 	}
 }
 
@@ -187,8 +192,10 @@ void Graph<T>::VisitEntireGraph(bool mark){
 	for (int i = 0; i < vertexCount; i++){
 		vertices[i].Visit(mark);
 	}
-	for (list<Edge*>::iterator it = edges.begin(); it != edges.end(); it++){
-		(*it)->Visited = mark;
+	for (int i = 0; i < vertexCount; i++){
+		for (int j = 0; j < vertexCount; j++){
+			edgeVisitedMatrix[i][j] = false;
+		}
 	}
 }
 
@@ -222,11 +229,6 @@ void Graph<T>::HasCycle(Vertex<T> *vertex, bool &result) {
 			HasCycle(&vertices[vertex->GetEdge(i)->DestVertexIndex], result);
 		}
 	}
-}
-
-template<class T>
-void Graph<T>::Connect(int vertex1, int vertex2, int weight){
-
 }
 
 bool Edge::operator<(Edge &other){

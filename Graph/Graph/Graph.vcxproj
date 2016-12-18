@@ -134,7 +134,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Graph.cpp" />
     <ClCompile Include="GraphForm.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Vertex.cpp" />
@@ -144,12 +143,16 @@
     <ClInclude Include="GraphForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="Pos.h" />
     <ClInclude Include="Vertex.h" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="GraphForm.resx">
       <DependentUpon>GraphForm.h</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Graph.template" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
