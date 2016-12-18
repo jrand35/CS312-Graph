@@ -232,6 +232,68 @@ void Graph<T>::HasCycle(Vertex<T> *vertex, bool &result) {
 	}
 }
 
+template<class T>
+void Graph<T>::Dijkstra(int start, int end){
+	VisitEntireGraph(false);
+	MarkEntireGraph(false);
+
+	for (int i = 0; i < vertexCount; i++){
+		vertices[i].SetDistance(99999);
+	}
+
+	bool result = false;
+	for (int i = 0; i < vertexCount; i++){
+		if (adjacencyMatrix[start][i] == 0)
+			continue;
+		vertices[i].SetDistance(adjacencyMatrix[start][i]);
+		vertices[i].SetPrevVertex(start);
+	}
+	vertices[start].Visit(true);
+	for (int i = 0; i < vertexCount; i++){
+		if (adjacencyMatrix[start][i] == 0)
+			continue;
+		DijkstraStep(i, end, adjacencyMatrix[start][i], result);
+	}
+
+
+	//After completing the algorithm, mark the graph
+	int index = end;
+	while (index != start){
+		vertices[index].Mark(true);
+		edgeMarkedMatrix[vertices[index].GetPrevVertex()][index] = true;
+		index = vertices[index].GetPrevVertex();
+	}
+	vertices[start].Mark(true);
+}
+
+//Do not need to sort edges by length
+template<class T>
+void Graph<T>::DijkstraStep(int vertex, int end, int currentDist, bool &success){
+	//Safety
+	if (vertices[vertex].IsVisited())
+		return;
+
+	if (vertex == end){
+		success = true;
+		return;
+	}
+
+	for (int i = 0; i < vertexCount; i++){
+		if (adjacencyMatrix[vertex][i] == 0 || vertices[i].IsMarked())
+			continue;
+		if (vertices[i].GetDistance() > currentDist + adjacencyMatrix[vertex][i]){
+			vertices[i].SetDistance(currentDist + adjacencyMatrix[vertex][i]);
+			vertices[i].SetPrevVertex(vertex);
+		}
+	}
+	vertices[vertex].Visit(true);
+	for (int i = 0; i < vertexCount; i++){
+		if (adjacencyMatrix[vertex][i] == 0)
+			continue;
+		DijkstraStep(i, end, currentDist + adjacencyMatrix[vertex][i], success);
+	}
+}
+
 //Should go in order of lightest to heaviest edge
 template<class T>
 void Graph<T>::DepthFirstSearch(int vertex, String ^&result){

@@ -37,6 +37,26 @@ void Vertex<T>::Visit(bool mark){
 }
 
 template<class T>
+void Vertex<T>::SetDistance(int dist){
+	distance = dist;
+}
+
+template<class T>
+void Vertex<T>::SetPrevVertex(int prev){
+	prevVertex = prev;
+}
+
+template<class T>
+int Vertex<T>::GetDistance() const{
+	return distance;
+}
+
+template<class T>
+int Vertex<T>::GetPrevVertex() const{
+	return prevVertex;
+}
+
+template<class T>
 bool Vertex<T>::IsMarked() const{
 	return marked;
 }

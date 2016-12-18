@@ -62,6 +62,12 @@ namespace GraphProject {
 	private: System::Windows::Forms::Label^  SearchLabel;
 	private: System::Windows::Forms::ListBox^  listBox1;
 	private: System::Windows::Forms::CheckBox^  checkBox1;
+	private: System::Windows::Forms::TextBox^  dijkstraStart;
+	private: System::Windows::Forms::TextBox^  dijkstraEnd;
+
+
+	private: System::Windows::Forms::Label^  label6;
+	private: System::Windows::Forms::Label^  label7;
 
 
 
@@ -186,6 +192,10 @@ namespace GraphProject {
 			this->SearchLabel = (gcnew System::Windows::Forms::Label());
 			this->listBox1 = (gcnew System::Windows::Forms::ListBox());
 			this->checkBox1 = (gcnew System::Windows::Forms::CheckBox());
+			this->dijkstraStart = (gcnew System::Windows::Forms::TextBox());
+			this->dijkstraEnd = (gcnew System::Windows::Forms::TextBox());
+			this->label6 = (gcnew System::Windows::Forms::Label());
+			this->label7 = (gcnew System::Windows::Forms::Label());
 			this->SuspendLayout();
 			// 
 			// panel1
@@ -242,6 +252,7 @@ namespace GraphProject {
 			this->dijkstraButton->TabIndex = 5;
 			this->dijkstraButton->Text = L"Dijkstra\'s Algorithm";
 			this->dijkstraButton->UseVisualStyleBackColor = true;
+			this->dijkstraButton->Click += gcnew System::EventHandler(this, &GraphForm::dijkstraButton_Click);
 			// 
 			// vertexBox
 			// 
@@ -343,6 +354,40 @@ namespace GraphProject {
 			this->checkBox1->UseVisualStyleBackColor = true;
 			this->checkBox1->CheckedChanged += gcnew System::EventHandler(this, &GraphForm::checkBox1_CheckedChanged);
 			// 
+			// dijkstraStart
+			// 
+			this->dijkstraStart->Location = System::Drawing::Point(778, 180);
+			this->dijkstraStart->MaxLength = 2;
+			this->dijkstraStart->Name = L"dijkstraStart";
+			this->dijkstraStart->Size = System::Drawing::Size(37, 20);
+			this->dijkstraStart->TabIndex = 6;
+			// 
+			// dijkstraEnd
+			// 
+			this->dijkstraEnd->Location = System::Drawing::Point(821, 180);
+			this->dijkstraEnd->MaxLength = 2;
+			this->dijkstraEnd->Name = L"dijkstraEnd";
+			this->dijkstraEnd->Size = System::Drawing::Size(37, 20);
+			this->dijkstraEnd->TabIndex = 6;
+			// 
+			// label6
+			// 
+			this->label6->AutoSize = true;
+			this->label6->Location = System::Drawing::Point(778, 164);
+			this->label6->Name = L"label6";
+			this->label6->Size = System::Drawing::Size(29, 13);
+			this->label6->TabIndex = 7;
+			this->label6->Text = L"Start";
+			// 
+			// label7
+			// 
+			this->label7->AutoSize = true;
+			this->label7->Location = System::Drawing::Point(823, 164);
+			this->label7->Name = L"label7";
+			this->label7->Size = System::Drawing::Size(26, 13);
+			this->label7->TabIndex = 7;
+			this->label7->Text = L"End";
+			// 
 			// GraphForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
@@ -356,8 +401,12 @@ namespace GraphProject {
 			this->Controls->Add(this->resetButton);
 			this->Controls->Add(this->label4);
 			this->Controls->Add(this->label5);
+			this->Controls->Add(this->label7);
+			this->Controls->Add(this->label6);
 			this->Controls->Add(this->label3);
 			this->Controls->Add(this->searchVertexBox);
+			this->Controls->Add(this->dijkstraEnd);
+			this->Controls->Add(this->dijkstraStart);
 			this->Controls->Add(this->vertexBox);
 			this->Controls->Add(this->dijkstraButton);
 			this->Controls->Add(this->label2);
@@ -508,5 +557,19 @@ private: System::Void breadthButton_Click(System::Object^  sender, System::Event
 private: System::Void checkBox1_CheckedChanged(System::Object^  sender, System::EventArgs^  e) {
 	panel1->Refresh();
 }
+	private: System::Void dijkstraButton_Click(System::Object^  sender, System::EventArgs^  e) {
+		int start = -1, end = -1;
+		bool success = int::TryParse(dijkstraStart->Text, start);
+		if (!success || start < 0 || start >= graph->VertexCount())
+			return;
+
+		success = int::TryParse(dijkstraEnd->Text, end);
+		if (!success || end < 0 || end >= graph->VertexCount())
+			return;
+
+		graph->Dijkstra(start, end);
+		UpdateLabels();
+		panel1->Refresh();
+	}
 };
 }

@@ -44,9 +44,10 @@ public:
 	Vertex<T> *GetVertex(int index);
 	int GetEdgeWeight(int vertex1, int vertex2);
 	bool GetEdgeMarked(int vertex1, int vertex2);
-	//Fix, Prim and Kruskal should ignore directions
 	void Prim(int vertex, System::Windows::Forms::ListBox::ObjectCollection ^&output);
 	void Kruskal(System::Windows::Forms::ListBox::ObjectCollection ^&output);
+	//Dijkstra's Algorithm using Breadth-first searches
+	void Dijkstra(int start, int end);
 	void DepthFirstSearch(int vertex, String ^&result);
 	void BreadthFirstSearch(int vertex, String ^&result);
 	string GetEdgeWeights();
@@ -63,6 +64,7 @@ private:
 	int treeEdgeCount;
 	int vertexCount;
 	void PrimStep(System::Windows::Forms::ListBox::ObjectCollection ^&output);
+	void DijkstraStep(int vertex, int end, int currentDist, bool &success);
 	list<Edge> GetSortedEdges();
 };
 
