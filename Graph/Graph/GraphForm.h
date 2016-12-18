@@ -68,6 +68,13 @@ namespace GraphProject {
 
 	private: System::Windows::Forms::Label^  label6;
 	private: System::Windows::Forms::Label^  label7;
+	private: System::Windows::Forms::Button^  undirectedButton;
+	private: System::Windows::Forms::Button^  acyclicButton;
+
+
+	private: System::Windows::Forms::Button^  cyclicButton;
+
+	private: System::Windows::Forms::Label^  label8;
 
 
 
@@ -164,7 +171,8 @@ namespace GraphProject {
 		Pen ^edgePen;
 		Pen ^markedEdgePen;
 		cli::array<Label^>^ labels;
-
+		bool graphLoaded = false;
+		int labelCount = 0;
 
 		Graph<Pos> *graph = nullptr;
 
@@ -196,6 +204,10 @@ namespace GraphProject {
 			this->dijkstraEnd = (gcnew System::Windows::Forms::TextBox());
 			this->label6 = (gcnew System::Windows::Forms::Label());
 			this->label7 = (gcnew System::Windows::Forms::Label());
+			this->undirectedButton = (gcnew System::Windows::Forms::Button());
+			this->acyclicButton = (gcnew System::Windows::Forms::Button());
+			this->cyclicButton = (gcnew System::Windows::Forms::Button());
+			this->label8 = (gcnew System::Windows::Forms::Label());
 			this->SuspendLayout();
 			// 
 			// panel1
@@ -209,7 +221,7 @@ namespace GraphProject {
 			// label1
 			// 
 			this->label1->AutoSize = true;
-			this->label1->Location = System::Drawing::Point(858, 57);
+			this->label1->Location = System::Drawing::Point(973, 64);
 			this->label1->Name = L"label1";
 			this->label1->Size = System::Drawing::Size(116, 13);
 			this->label1->TabIndex = 1;
@@ -217,7 +229,7 @@ namespace GraphProject {
 			// 
 			// primButton
 			// 
-			this->primButton->Location = System::Drawing::Point(861, 73);
+			this->primButton->Location = System::Drawing::Point(976, 80);
 			this->primButton->Name = L"primButton";
 			this->primButton->Size = System::Drawing::Size(107, 23);
 			this->primButton->TabIndex = 2;
@@ -227,7 +239,7 @@ namespace GraphProject {
 			// 
 			// kruskalButton
 			// 
-			this->kruskalButton->Location = System::Drawing::Point(861, 102);
+			this->kruskalButton->Location = System::Drawing::Point(976, 109);
 			this->kruskalButton->Name = L"kruskalButton";
 			this->kruskalButton->Size = System::Drawing::Size(107, 23);
 			this->kruskalButton->TabIndex = 3;
@@ -238,7 +250,7 @@ namespace GraphProject {
 			// label2
 			// 
 			this->label2->AutoSize = true;
-			this->label2->Location = System::Drawing::Point(882, 164);
+			this->label2->Location = System::Drawing::Point(997, 171);
 			this->label2->Name = L"label2";
 			this->label2->Size = System::Drawing::Size(68, 13);
 			this->label2->TabIndex = 4;
@@ -246,7 +258,7 @@ namespace GraphProject {
 			// 
 			// dijkstraButton
 			// 
-			this->dijkstraButton->Location = System::Drawing::Point(861, 180);
+			this->dijkstraButton->Location = System::Drawing::Point(976, 187);
 			this->dijkstraButton->Name = L"dijkstraButton";
 			this->dijkstraButton->Size = System::Drawing::Size(107, 23);
 			this->dijkstraButton->TabIndex = 5;
@@ -256,7 +268,7 @@ namespace GraphProject {
 			// 
 			// vertexBox
 			// 
-			this->vertexBox->Location = System::Drawing::Point(818, 73);
+			this->vertexBox->Location = System::Drawing::Point(933, 80);
 			this->vertexBox->MaxLength = 2;
 			this->vertexBox->Name = L"vertexBox";
 			this->vertexBox->Size = System::Drawing::Size(37, 20);
@@ -265,7 +277,7 @@ namespace GraphProject {
 			// label3
 			// 
 			this->label3->AutoSize = true;
-			this->label3->Location = System::Drawing::Point(776, 57);
+			this->label3->Location = System::Drawing::Point(891, 64);
 			this->label3->Name = L"label3";
 			this->label3->Size = System::Drawing::Size(76, 13);
 			this->label3->TabIndex = 7;
@@ -274,7 +286,7 @@ namespace GraphProject {
 			// label4
 			// 
 			this->label4->AutoSize = true;
-			this->label4->Location = System::Drawing::Point(778, 317);
+			this->label4->Location = System::Drawing::Point(893, 324);
 			this->label4->Name = L"label4";
 			this->label4->Size = System::Drawing::Size(139, 13);
 			this->label4->TabIndex = 9;
@@ -282,7 +294,7 @@ namespace GraphProject {
 			// 
 			// resetButton
 			// 
-			this->resetButton->Location = System::Drawing::Point(893, 271);
+			this->resetButton->Location = System::Drawing::Point(1008, 278);
 			this->resetButton->Name = L"resetButton";
 			this->resetButton->Size = System::Drawing::Size(75, 23);
 			this->resetButton->TabIndex = 10;
@@ -292,7 +304,7 @@ namespace GraphProject {
 			// 
 			// breadthButton
 			// 
-			this->breadthButton->Location = System::Drawing::Point(885, 639);
+			this->breadthButton->Location = System::Drawing::Point(1000, 646);
 			this->breadthButton->Name = L"breadthButton";
 			this->breadthButton->Size = System::Drawing::Size(109, 23);
 			this->breadthButton->TabIndex = 11;
@@ -302,7 +314,7 @@ namespace GraphProject {
 			// 
 			// depthButton
 			// 
-			this->depthButton->Location = System::Drawing::Point(885, 610);
+			this->depthButton->Location = System::Drawing::Point(1000, 617);
 			this->depthButton->Name = L"depthButton";
 			this->depthButton->Size = System::Drawing::Size(109, 23);
 			this->depthButton->TabIndex = 12;
@@ -313,7 +325,7 @@ namespace GraphProject {
 			// label5
 			// 
 			this->label5->AutoSize = true;
-			this->label5->Location = System::Drawing::Point(874, 587);
+			this->label5->Location = System::Drawing::Point(989, 594);
 			this->label5->Name = L"label5";
 			this->label5->Size = System::Drawing::Size(76, 13);
 			this->label5->TabIndex = 7;
@@ -321,7 +333,7 @@ namespace GraphProject {
 			// 
 			// searchVertexBox
 			// 
-			this->searchVertexBox->Location = System::Drawing::Point(957, 584);
+			this->searchVertexBox->Location = System::Drawing::Point(1072, 591);
 			this->searchVertexBox->MaxLength = 2;
 			this->searchVertexBox->Name = L"searchVertexBox";
 			this->searchVertexBox->Size = System::Drawing::Size(37, 20);
@@ -330,23 +342,23 @@ namespace GraphProject {
 			// SearchLabel
 			// 
 			this->SearchLabel->BackColor = System::Drawing::SystemColors::ButtonHighlight;
-			this->SearchLabel->Location = System::Drawing::Point(801, 685);
+			this->SearchLabel->Location = System::Drawing::Point(781, 692);
 			this->SearchLabel->Name = L"SearchLabel";
-			this->SearchLabel->Size = System::Drawing::Size(193, 65);
+			this->SearchLabel->Size = System::Drawing::Size(328, 65);
 			this->SearchLabel->TabIndex = 13;
 			// 
 			// listBox1
 			// 
 			this->listBox1->FormattingEnabled = true;
-			this->listBox1->Location = System::Drawing::Point(781, 333);
+			this->listBox1->Location = System::Drawing::Point(781, 340);
 			this->listBox1->Name = L"listBox1";
-			this->listBox1->Size = System::Drawing::Size(213, 225);
+			this->listBox1->Size = System::Drawing::Size(328, 225);
 			this->listBox1->TabIndex = 14;
 			// 
 			// checkBox1
 			// 
 			this->checkBox1->AutoSize = true;
-			this->checkBox1->Location = System::Drawing::Point(832, 131);
+			this->checkBox1->Location = System::Drawing::Point(947, 138);
 			this->checkBox1->Name = L"checkBox1";
 			this->checkBox1->Size = System::Drawing::Size(142, 17);
 			this->checkBox1->TabIndex = 15;
@@ -356,7 +368,7 @@ namespace GraphProject {
 			// 
 			// dijkstraStart
 			// 
-			this->dijkstraStart->Location = System::Drawing::Point(778, 180);
+			this->dijkstraStart->Location = System::Drawing::Point(893, 187);
 			this->dijkstraStart->MaxLength = 2;
 			this->dijkstraStart->Name = L"dijkstraStart";
 			this->dijkstraStart->Size = System::Drawing::Size(37, 20);
@@ -364,7 +376,7 @@ namespace GraphProject {
 			// 
 			// dijkstraEnd
 			// 
-			this->dijkstraEnd->Location = System::Drawing::Point(821, 180);
+			this->dijkstraEnd->Location = System::Drawing::Point(936, 187);
 			this->dijkstraEnd->MaxLength = 2;
 			this->dijkstraEnd->Name = L"dijkstraEnd";
 			this->dijkstraEnd->Size = System::Drawing::Size(37, 20);
@@ -373,7 +385,7 @@ namespace GraphProject {
 			// label6
 			// 
 			this->label6->AutoSize = true;
-			this->label6->Location = System::Drawing::Point(778, 164);
+			this->label6->Location = System::Drawing::Point(893, 171);
 			this->label6->Name = L"label6";
 			this->label6->Size = System::Drawing::Size(29, 13);
 			this->label6->TabIndex = 7;
@@ -382,17 +394,60 @@ namespace GraphProject {
 			// label7
 			// 
 			this->label7->AutoSize = true;
-			this->label7->Location = System::Drawing::Point(823, 164);
+			this->label7->Location = System::Drawing::Point(938, 171);
 			this->label7->Name = L"label7";
 			this->label7->Size = System::Drawing::Size(26, 13);
 			this->label7->TabIndex = 7;
 			this->label7->Text = L"End";
 			// 
+			// undirectedButton
+			// 
+			this->undirectedButton->Location = System::Drawing::Point(781, 31);
+			this->undirectedButton->Name = L"undirectedButton";
+			this->undirectedButton->Size = System::Drawing::Size(102, 23);
+			this->undirectedButton->TabIndex = 16;
+			this->undirectedButton->Text = L"Undirected Graph";
+			this->undirectedButton->UseVisualStyleBackColor = true;
+			this->undirectedButton->Click += gcnew System::EventHandler(this, &GraphForm::undirectedButton_Click);
+			// 
+			// acyclicButton
+			// 
+			this->acyclicButton->Location = System::Drawing::Point(1015, 31);
+			this->acyclicButton->Name = L"acyclicButton";
+			this->acyclicButton->Size = System::Drawing::Size(102, 23);
+			this->acyclicButton->TabIndex = 16;
+			this->acyclicButton->Text = L"Acyclic Graph";
+			this->acyclicButton->UseVisualStyleBackColor = true;
+			this->acyclicButton->Click += gcnew System::EventHandler(this, &GraphForm::acyclicButton_Click);
+			// 
+			// cyclicButton
+			// 
+			this->cyclicButton->Location = System::Drawing::Point(898, 31);
+			this->cyclicButton->Name = L"cyclicButton";
+			this->cyclicButton->Size = System::Drawing::Size(102, 23);
+			this->cyclicButton->TabIndex = 16;
+			this->cyclicButton->Text = L"Cyclic Graph";
+			this->cyclicButton->UseVisualStyleBackColor = true;
+			this->cyclicButton->Click += gcnew System::EventHandler(this, &GraphForm::cyclicButton_Click);
+			// 
+			// label8
+			// 
+			this->label8->AutoSize = true;
+			this->label8->Location = System::Drawing::Point(922, 15);
+			this->label8->Name = L"label8";
+			this->label8->Size = System::Drawing::Size(72, 13);
+			this->label8->TabIndex = 17;
+			this->label8->Text = L"Load a Graph";
+			// 
 			// GraphForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(1006, 762);
+			this->ClientSize = System::Drawing::Size(1129, 762);
+			this->Controls->Add(this->label8);
+			this->Controls->Add(this->cyclicButton);
+			this->Controls->Add(this->acyclicButton);
+			this->Controls->Add(this->undirectedButton);
 			this->Controls->Add(this->checkBox1);
 			this->Controls->Add(this->listBox1);
 			this->Controls->Add(this->SearchLabel);
@@ -421,44 +476,78 @@ namespace GraphProject {
 			this->PerformLayout();
 
 		}
+
+		void LoadGraph(string graphName){
+			if (graph != nullptr){
+				delete graph;
+			}
+			graph = new Graph<Pos>();
+			LoadVertices(graph, graphName + " Graph Vertices.txt");
+			graph->LoadEdges(graphName + " Graph Edges.txt");
+			labels = gcnew cli::array<Label^>(graph->VertexCount());
+
+			for (int i = 0; i < labelCount; i++){
+				panel1->Controls->Remove(labels[i]);
+			}
+			labelCount = 0;
+
+			//Display edge weights
+			//O(n^2)
+			for (int i = 0; i < graph->VertexCount(); i++){
+				Label^ l = newLabel(i.ToString(), graph->GetVertex(i)->GetT().X, graph->GetVertex(i)->GetT().Y);
+				labels[labelCount] = l;
+				labelCount++;
+
+				for (int j = 0; j < graph->VertexCount(); j++){
+					int w = graph->GetEdgeWeight(i, j);
+					if (w == 0)
+						continue;
+					Pos p1 = graph->GetVertex(i)->GetT();
+					Pos p2 = graph->GetVertex(j)->GetT();
+					int x1 = p1.X;
+					int y1 = p1.Y;
+					int x2 = p2.X;
+					int y2 = p2.Y;
+					Point center = Point(x1 + (x2 - x1) / 2, y1 + (y2 - y1) / 2);
+					newLabel2(w.ToString(), center.X + 8, center.Y + 8);
+				}
+			}
+			EnableGraphButtons(false);
+			graphLoaded = true;
+			panel1->Refresh();
+		}
+
+		void EnableButtons(bool enabled){
+			primButton->Enabled = enabled;
+			kruskalButton->Enabled = enabled;
+			dijkstraButton->Enabled = enabled;
+			resetButton->Enabled = enabled;
+			breadthButton->Enabled = enabled;
+			depthButton->Enabled = enabled;
+		}
+
+		void EnableGraphButtons(bool enabled){
+			undirectedButton->Enabled = enabled;
+			cyclicButton->Enabled = enabled;
+			acyclicButton->Enabled = enabled;
+		}
+
 #pragma endregion
 	private: System::Void GraphForm_Load(System::Object^  sender, System::EventArgs^  e) {
+		graph = nullptr;
+		labelCount = 0;
+		g = panel1->CreateGraphics();
 		edgePen = gcnew Pen(Color::LightBlue, 6);
-		//edgePen->StartCap = Drawing2D::LineCap::RoundAnchor;
 		edgePen->EndCap = Drawing2D::LineCap::ArrowAnchor;
 		markedEdgePen = gcnew Pen(Color::Blue, 6);
 		markedEdgePen->EndCap = Drawing2D::LineCap::ArrowAnchor;
-		graph = new Graph<Pos>();
-		LoadVertices(graph, "Small Graph Vertices.txt");
-		graph->LoadEdges("Small Graph Edges.txt");
-		labels = gcnew cli::array<Label^>(graph->VertexCount());
 		bool result = false;
-		int labelCount = 0;
 
-		g = panel1->CreateGraphics();
-
-		//Display edge weights
-		//O(n^2)
-		for (int i = 0; i < graph->VertexCount(); i++){
-			Label^ l = newLabel(i.ToString(), graph->GetVertex(i)->GetT().X, graph->GetVertex(i)->GetT().Y);
-			labels[labelCount++] = l;
-
-			for (int j = 0; j < graph->VertexCount(); j++){
-				int w = graph->GetEdgeWeight(i, j);
-				if (w == 0)
-					continue;
-				Pos p1 = graph->GetVertex(i)->GetT();
-				Pos p2 = graph->GetVertex(j)->GetT();
-				int x1 = p1.X;
-				int y1 = p1.Y;
-				int x2 = p2.X;
-				int y2 = p2.Y;
-				Point center = Point(x1 + (x2 - x1) / 2, y1 + (y2 - y1) / 2);
-				newLabel2(w.ToString(), center.X + 8, center.Y + 8);
-			}
-		}
+		EnableButtons(false);
 	}
 	private: System::Void panel1_Paint(System::Object^  sender, System::Windows::Forms::PaintEventArgs^  e) {
+		if (!graphLoaded)
+			return;
 		//Display edges
 		for (int i = 0; i < graph->VertexCount(); i++){
 			for (int j = 0; j < graph->VertexCount(); j++){
@@ -571,5 +660,17 @@ private: System::Void checkBox1_CheckedChanged(System::Object^  sender, System::
 		UpdateLabels();
 		panel1->Refresh();
 	}
+private: System::Void cyclicButton_Click(System::Object^  sender, System::EventArgs^  e) {
+	LoadGraph("Cyclic");
+	EnableButtons(true);
+}
+private: System::Void undirectedButton_Click(System::Object^  sender, System::EventArgs^  e) {
+	LoadGraph("Small");
+	EnableButtons(true);
+}
+private: System::Void acyclicButton_Click(System::Object^  sender, System::EventArgs^  e) {
+	LoadGraph("Acyclic");
+	EnableButtons(true);
+}
 };
 }

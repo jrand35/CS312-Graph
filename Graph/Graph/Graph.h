@@ -12,6 +12,7 @@ struct Edge {
 	int Weight;
 	int vertexIndex;
 	int DestVertexIndex;
+	bool Forward;
 	bool Marked;
 	bool Visited;
 

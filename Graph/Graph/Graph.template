@@ -97,15 +97,17 @@ void Graph<T>::Prim(int vertex, System::Windows::Forms::ListBox::ObjectCollectio
 			e.vertexIndex = vertex;
 			e.DestVertexIndex = i;
 			e.Weight = adjacencyMatrix[vertex][i];
+			e.Forward = true;
 			spanningTreeEdges.push_back(e);
 			treeEdgeCount++;
 		}
 		if (adjacencyMatrix[i][vertex] != 0){
 
 			Edge e;
-			e.vertexIndex = i;
-			e.DestVertexIndex = vertex;
+			e.vertexIndex = vertex;
+			e.DestVertexIndex = i;
 			e.Weight = adjacencyMatrix[i][vertex];
+			e.Forward = false;
 			spanningTreeEdges.push_back(e);
 			treeEdgeCount++;
 		}
@@ -131,10 +133,16 @@ void Graph<T>::PrimStep(System::Windows::Forms::ListBox::ObjectCollection ^&outp
 		v->Mark(true);
 		//Does nothing
 		smallestEdge->Marked = true;
-		edgeMarkedMatrix[smallestEdge->vertexIndex][smallestEdge->DestVertexIndex] = true;
+		if (smallestEdge->Forward)
+			edgeMarkedMatrix[smallestEdge->vertexIndex][smallestEdge->DestVertexIndex] = true;
+		else
+			edgeMarkedMatrix[smallestEdge->DestVertexIndex][smallestEdge->vertexIndex] = true;
 
 		//Write to the output window
-		output->Add(smallestEdge->vertexIndex.ToString() + "->" + smallestEdge->DestVertexIndex.ToString() + "(" + smallestEdge->Weight.ToString() + ")");
+		if (smallestEdge->Forward)
+			output->Add(smallestEdge->vertexIndex.ToString() + "->" + smallestEdge->DestVertexIndex.ToString() + "(" + smallestEdge->Weight.ToString() + ")");
+		else
+			output->Add(smallestEdge->DestVertexIndex.ToString() + "->" + smallestEdge->vertexIndex.ToString() + "(" + smallestEdge->Weight.ToString() + ")");
 
 		//Add the edges connected to the vertex to the spanning tree
 		for (int i = 0; i < vertexCount; i++){
@@ -143,14 +151,16 @@ void Graph<T>::PrimStep(System::Windows::Forms::ListBox::ObjectCollection ^&outp
 				e.vertexIndex = v->GetIndex();
 				e.DestVertexIndex = i;
 				e.Weight = adjacencyMatrix[v->GetIndex()][i];
+				e.Forward = true;
 				spanningTreeEdges.push_back(e);
 				treeEdgeCount++;
 			}
 			if (adjacencyMatrix[i][v->GetIndex()] != 0){
 				Edge e;
-				e.vertexIndex = i;
-				e.DestVertexIndex = v->GetIndex();
+				e.vertexIndex = v->GetIndex();
+				e.DestVertexIndex = i;
 				e.Weight = adjacencyMatrix[i][v->GetIndex()];
+				e.Forward = false;
 				spanningTreeEdges.push_back(e);
 				treeEdgeCount++;
 			}
