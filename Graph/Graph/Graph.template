@@ -11,6 +11,7 @@ Graph<T>::~Graph(){
 		delete[] edgeMarkedMatrix[i];
 		delete[] edgeVisitedMatrix[i];
 	}
+	delete[] inTreeMatrix;
 	delete[] adjacencyMatrix;
 	delete[] edgeMarkedMatrix;
 	delete[] edgeVisitedMatrix;
@@ -23,6 +24,7 @@ void Graph<T>::SetupMatrices(){
 	edgeMarkedMatrix = new bool*[vertexCount];
 	edgeVisitedMatrix = new bool*[vertexCount];
 	for (int i = 0; i < vertexCount; i++){
+		inTreeMatrix = new bool[vertexCount];
 		adjacencyMatrix[i] = new int[vertexCount];
 		edgeMarkedMatrix[i] = new bool[vertexCount];
 		edgeVisitedMatrix[i] = new bool[vertexCount];
@@ -31,6 +33,9 @@ void Graph<T>::SetupMatrices(){
 			edgeMarkedMatrix[i][j] = false;
 			edgeVisitedMatrix[i][j] = false;
 		}
+	}
+	for (int i = 0; i < vertexCount; i++){
+		inTreeMatrix[i] = true;
 	}
 }
 
@@ -50,6 +55,7 @@ void Graph<T>::LoadEdges(string filename){
 			adjacencyMatrix[stoi(n1)][stoi(n2)] = stoi(w);
 		}
 	}
+	CheckIsConnected();
 	file.close();
 }
 
@@ -81,6 +87,8 @@ bool Graph<T>::GetEdgeMarked(int vertex1, int vertex2){
 
 template<class T>
 void Graph<T>::Prim(int vertex, System::Windows::Forms::ListBox::ObjectCollection ^&output){
+	VisitEntireGraph(false);
+	MarkEntireGraph(false);
 	output->Add("Order:");
 	output->Add("Start->End(Weight)");
 	spanningTreeEdges.clear();
@@ -191,15 +199,47 @@ list<Edge> Graph<T>::GetSortedEdges(){
 }
 
 template<class T>
+void Graph<T>::VisitAllMarkedVertices(int v){
+	//Check if all vertices in the tree are connected
+	if (vertices[v].IsVisited())
+		return;
+
+	vertices[v].Visit(true);
+	for (int i = 0; i < vertexCount; i++){
+		if ((edgeMarkedMatrix[v][i] || edgeMarkedMatrix[i][v]) && inTreeMatrix[i]){
+			VisitAllMarkedVertices(i);
+		}
+	}
+}
+
+template<class T>
+bool Graph<T>::AllReachableVerticesConnected(){
+	for (int i = 0; i < vertexCount; i++){
+		if (inTreeMatrix[i]){
+			if (!vertices[i].IsVisited())
+				return false;
+		}
+	}
+	return true;
+}
+
+template<class T>
 void Graph<T>::Kruskal(System::Windows::Forms::ListBox::ObjectCollection ^&output){
+	MarkEntireGraph(false);
+	VisitEntireGraph(false);
 	output->Add("Order:");
 	output->Add("Start->End(Weight)");
 	//Make a list of all edges
 	list<Edge> edges = GetSortedEdges();
 	list<Edge>::iterator it;
 	for (it = edges.begin(); it != edges.end(); it++){
-		if (vertices[it->vertexIndex].IsMarked() && vertices[it->DestVertexIndex].IsMarked())
-			continue;
+		//Stop when all vertices in the tree are connected, ignore all unreachable vertices
+		VisitAllMarkedVertices(0);
+		if (AllReachableVerticesConnected())
+			break;
+		VisitEntireGraph(false);
+		/*if (vertices[it->vertexIndex].IsMarked() && vertices[it->DestVertexIndex].IsMarked())
+			continue;*/
 		edgeMarkedMatrix[it->vertexIndex][it->DestVertexIndex] = true;
 		it->Marked = true;
 		bool result = false;
@@ -243,7 +283,7 @@ void Graph<T>::HasCycle(Vertex<T> *vertex, bool &result) {
 }
 
 template<class T>
-void Graph<T>::Dijkstra(int start, int end){
+bool Graph<T>::Dijkstra(int start, int end){
 	VisitEntireGraph(false);
 	MarkEntireGraph(false);
 
@@ -267,13 +307,16 @@ void Graph<T>::Dijkstra(int start, int end){
 
 
 	//After completing the algorithm, mark the graph
-	int index = end;
-	while (index != start){
-		vertices[index].Mark(true);
-		edgeMarkedMatrix[vertices[index].GetPrevVertex()][index] = true;
-		index = vertices[index].GetPrevVertex();
+	if (result){
+		int index = end;
+		while (index != start){
+			vertices[index].Mark(true);
+			edgeMarkedMatrix[vertices[index].GetPrevVertex()][index] = true;
+			index = vertices[index].GetPrevVertex();
+		}
+		vertices[start].Mark(true);
 	}
-	vertices[start].Mark(true);
+	return result;
 }
 
 //Do not need to sort edges by length
@@ -412,6 +455,7 @@ void Graph<T>::VisitEntireGraph(bool mark){
 
 template<class T>
 bool Graph<T>::CheckIsConnected() {
+	bool result = true;
 	bool connected = false;
 	for (int i = 0; i < vertexCount; i++){
 		connected = false;
@@ -421,8 +465,10 @@ bool Graph<T>::CheckIsConnected() {
 				continue;
 			}
 		}
-		if (!connected)
-			return false;
+		if (!connected){
+			inTreeMatrix[i] = false;
+			result = false;
+		}
 	}
-	return true;
+	return result;
 }

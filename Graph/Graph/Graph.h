@@ -48,7 +48,7 @@ public:
 	void Prim(int vertex, System::Windows::Forms::ListBox::ObjectCollection ^&output);
 	void Kruskal(System::Windows::Forms::ListBox::ObjectCollection ^&output);
 	//Dijkstra's Algorithm using Breadth-first searches
-	void Dijkstra(int start, int end);
+	bool Dijkstra(int start, int end);
 	void DepthFirstSearch(int vertex, String ^&result);
 	void BreadthFirstSearch(int vertex, String ^&result);
 	string GetEdgeWeights();
@@ -60,6 +60,9 @@ private:
 	int **adjacencyMatrix;
 	bool **edgeMarkedMatrix;
 	bool **edgeVisitedMatrix;
+	bool *inTreeMatrix;
+	void VisitAllMarkedVertices(int vertex);
+	bool AllReachableVerticesConnected();
 	Vertex<T> vertices[MAX_VERTICES];
 	list<Edge> spanningTreeEdges;
 	int treeEdgeCount;

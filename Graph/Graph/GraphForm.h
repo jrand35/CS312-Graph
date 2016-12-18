@@ -582,7 +582,6 @@ namespace GraphProject {
 	private: System::Void primButton_Click(System::Object^  sender, System::EventArgs^  e) {
 		listBox1->Items->Clear();
 		ListBox::ObjectCollection ^col = gcnew ListBox::ObjectCollection(listBox1);
-		graph->MarkEntireGraph(false);
 		int num = -1;
 		bool result = int::TryParse(vertexBox->Text, num);
 		if (!result || num < 0 || num >= graph->VertexCount())
@@ -601,7 +600,6 @@ namespace GraphProject {
 private: System::Void kruskalButton_Click(System::Object^  sender, System::EventArgs^  e) {
 	listBox1->Items->Clear();
 	ListBox::ObjectCollection ^col = gcnew ListBox::ObjectCollection(listBox1);
-	graph->MarkEntireGraph(false);
 	graph->Kruskal(col);
 	UpdateLabels();
 	panel1->Refresh();
@@ -647,6 +645,7 @@ private: System::Void checkBox1_CheckedChanged(System::Object^  sender, System::
 	panel1->Refresh();
 }
 	private: System::Void dijkstraButton_Click(System::Object^  sender, System::EventArgs^  e) {
+		listBox1->Items->Clear();
 		int start = -1, end = -1;
 		bool success = int::TryParse(dijkstraStart->Text, start);
 		if (!success || start < 0 || start >= graph->VertexCount())
@@ -656,7 +655,9 @@ private: System::Void checkBox1_CheckedChanged(System::Object^  sender, System::
 		if (!success || end < 0 || end >= graph->VertexCount())
 			return;
 
-		graph->Dijkstra(start, end);
+		bool pathResult = graph->Dijkstra(start, end);
+		if (!pathResult)
+			listBox1->Items->Add("Unable to construct a path from " + start + " to " + end);
 		UpdateLabels();
 		panel1->Refresh();
 	}
