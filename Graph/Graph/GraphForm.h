@@ -51,7 +51,8 @@ namespace GraphProject {
 
 
 	private: System::Windows::Forms::Label^  label3;
-	private: System::Windows::Forms::Label^  Debugging;
+
+
 	private: System::Windows::Forms::Label^  label4;
 	private: System::Windows::Forms::Button^  resetButton;
 	private: System::Windows::Forms::Button^  breadthButton;
@@ -59,6 +60,9 @@ namespace GraphProject {
 	private: System::Windows::Forms::Label^  label5;
 	private: System::Windows::Forms::TextBox^  searchVertexBox;
 	private: System::Windows::Forms::Label^  SearchLabel;
+	private: System::Windows::Forms::ListBox^  listBox1;
+	private: System::Windows::Forms::CheckBox^  checkBox1;
+
 
 
 
@@ -152,7 +156,7 @@ namespace GraphProject {
 
 		Graphics ^g;
 		Pen ^edgePen;
-		Pen ^edgePen2;
+		Pen ^markedEdgePen;
 		cli::array<Label^>^ labels;
 
 
@@ -173,7 +177,6 @@ namespace GraphProject {
 			this->dijkstraButton = (gcnew System::Windows::Forms::Button());
 			this->vertexBox = (gcnew System::Windows::Forms::TextBox());
 			this->label3 = (gcnew System::Windows::Forms::Label());
-			this->Debugging = (gcnew System::Windows::Forms::Label());
 			this->label4 = (gcnew System::Windows::Forms::Label());
 			this->resetButton = (gcnew System::Windows::Forms::Button());
 			this->breadthButton = (gcnew System::Windows::Forms::Button());
@@ -181,6 +184,8 @@ namespace GraphProject {
 			this->label5 = (gcnew System::Windows::Forms::Label());
 			this->searchVertexBox = (gcnew System::Windows::Forms::TextBox());
 			this->SearchLabel = (gcnew System::Windows::Forms::Label());
+			this->listBox1 = (gcnew System::Windows::Forms::ListBox());
+			this->checkBox1 = (gcnew System::Windows::Forms::CheckBox());
 			this->SuspendLayout();
 			// 
 			// panel1
@@ -255,24 +260,14 @@ namespace GraphProject {
 			this->label3->TabIndex = 7;
 			this->label3->Text = L"Starting Vertex";
 			// 
-			// Debugging
-			// 
-			this->Debugging->BackColor = System::Drawing::SystemColors::ButtonHighlight;
-			this->Debugging->Location = System::Drawing::Point(778, 341);
-			this->Debugging->Name = L"Debugging";
-			this->Debugging->RightToLeft = System::Windows::Forms::RightToLeft::No;
-			this->Debugging->Size = System::Drawing::Size(216, 180);
-			this->Debugging->TabIndex = 8;
-			this->Debugging->Text = L"Debugging";
-			// 
 			// label4
 			// 
 			this->label4->AutoSize = true;
 			this->label4->Location = System::Drawing::Point(778, 317);
 			this->label4->Name = L"label4";
-			this->label4->Size = System::Drawing::Size(59, 13);
+			this->label4->Size = System::Drawing::Size(139, 13);
 			this->label4->TabIndex = 9;
-			this->label4->Text = L"Debugging";
+			this->label4->Text = L"Spanning Tree/Path Output";
 			// 
 			// resetButton
 			// 
@@ -329,17 +324,37 @@ namespace GraphProject {
 			this->SearchLabel->Size = System::Drawing::Size(193, 65);
 			this->SearchLabel->TabIndex = 13;
 			// 
+			// listBox1
+			// 
+			this->listBox1->FormattingEnabled = true;
+			this->listBox1->Location = System::Drawing::Point(781, 333);
+			this->listBox1->Name = L"listBox1";
+			this->listBox1->Size = System::Drawing::Size(213, 225);
+			this->listBox1->TabIndex = 14;
+			// 
+			// checkBox1
+			// 
+			this->checkBox1->AutoSize = true;
+			this->checkBox1->Location = System::Drawing::Point(832, 131);
+			this->checkBox1->Name = L"checkBox1";
+			this->checkBox1->Size = System::Drawing::Size(142, 17);
+			this->checkBox1->TabIndex = 15;
+			this->checkBox1->Text = L"Show only spanning tree";
+			this->checkBox1->UseVisualStyleBackColor = true;
+			this->checkBox1->CheckedChanged += gcnew System::EventHandler(this, &GraphForm::checkBox1_CheckedChanged);
+			// 
 			// GraphForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(1006, 762);
+			this->Controls->Add(this->checkBox1);
+			this->Controls->Add(this->listBox1);
 			this->Controls->Add(this->SearchLabel);
 			this->Controls->Add(this->depthButton);
 			this->Controls->Add(this->breadthButton);
 			this->Controls->Add(this->resetButton);
 			this->Controls->Add(this->label4);
-			this->Controls->Add(this->Debugging);
 			this->Controls->Add(this->label5);
 			this->Controls->Add(this->label3);
 			this->Controls->Add(this->searchVertexBox);
@@ -362,13 +377,12 @@ namespace GraphProject {
 		edgePen = gcnew Pen(Color::LightBlue, 6);
 		//edgePen->StartCap = Drawing2D::LineCap::RoundAnchor;
 		edgePen->EndCap = Drawing2D::LineCap::ArrowAnchor;
-		edgePen2 = gcnew Pen(Color::Blue, 6);
-		edgePen2->EndCap = Drawing2D::LineCap::ArrowAnchor;
+		markedEdgePen = gcnew Pen(Color::Blue, 6);
+		markedEdgePen->EndCap = Drawing2D::LineCap::ArrowAnchor;
 		graph = new Graph<Pos>();
 		LoadVertices(graph, "Small Graph Vertices.txt");
 		graph->LoadEdges("Small Graph Edges.txt");
 		labels = gcnew cli::array<Label^>(graph->VertexCount());
-		//Debugging->Text = gcnew String(graph->GetEdgeWeights().c_str());
 		bool result = false;
 		int labelCount = 0;
 
@@ -416,35 +430,41 @@ namespace GraphProject {
 				int x2 = x2_ - (ARROW_OFFSET * Math::Cos(direction));
 				int y2 = y2_ - (ARROW_OFFSET * Math::Sin(direction));
 
-				//TODO: Handle drawing marked edges
 				if (!graph->GetEdgeMarked(i, j)){
-					g->DrawLine(edgePen, x1 + 16, y1 + 16, x2 + 16, y2 + 16);
+					if (!checkBox1->Checked){
+						g->DrawLine(edgePen, x1 + 16, y1 + 16, x2 + 16, y2 + 16);
+					}
 				}
 				else{
-					g->DrawLine(edgePen2, x1 + 16, y1 + 16, x2 + 16, y2 + 16);
+					g->DrawLine(markedEdgePen, x1 + 16, y1 + 16, x2 + 16, y2 + 16);
 				}
 			}
 		}
 	}
 	private: System::Void primButton_Click(System::Object^  sender, System::EventArgs^  e) {
+		listBox1->Items->Clear();
+		ListBox::ObjectCollection ^col = gcnew ListBox::ObjectCollection(listBox1);
 		graph->MarkEntireGraph(false);
 		int num = -1;
 		bool result = int::TryParse(vertexBox->Text, num);
 		if (!result || num < 0 || num >= graph->VertexCount())
 			return;
 
-		graph->Prim(num);
+		graph->Prim(num, col);
 		UpdateLabels();
 		panel1->Refresh();
 	}
 	private: System::Void resetButton_Click(System::Object^  sender, System::EventArgs^  e) {
+		listBox1->Items->Clear();
 		graph->MarkEntireGraph(false);
 		UpdateLabels();
 		panel1->Refresh();
 	}
 private: System::Void kruskalButton_Click(System::Object^  sender, System::EventArgs^  e) {
+	listBox1->Items->Clear();
+	ListBox::ObjectCollection ^col = gcnew ListBox::ObjectCollection(listBox1);
 	graph->MarkEntireGraph(false);
-	graph->Kruskal();
+	graph->Kruskal(col);
 	UpdateLabels();
 	panel1->Refresh();
 }
@@ -460,8 +480,13 @@ private: System::Void depthButton_Click(System::Object^  sender, System::EventAr
 	SearchLabel->Text = result;
 	
 	graph->VisitEntireGraph(false);
+	graph->MarkEntireGraph(false);
+	UpdateLabels();
+
+	panel1->Refresh();
 }
 private: System::Void breadthButton_Click(System::Object^  sender, System::EventArgs^  e) {
+	graph->MarkEntireGraph(false);
 	int num = -1;
 	bool success = int::TryParse(searchVertexBox->Text, num);
 	if (!success || num < 0 || num >= graph->VertexCount())
@@ -476,6 +501,12 @@ private: System::Void breadthButton_Click(System::Object^  sender, System::Event
 
 	graph->VisitEntireGraph(false);
 	graph->MarkEntireGraph(false);
+	UpdateLabels();
+
+	panel1->Refresh();
+}
+private: System::Void checkBox1_CheckedChanged(System::Object^  sender, System::EventArgs^  e) {
+	panel1->Refresh();
 }
 };
 }

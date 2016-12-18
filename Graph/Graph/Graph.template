@@ -8,8 +8,12 @@ template<class T>
 Graph<T>::~Graph(){
 	for (int i = 0; i < vertexCount; i++){
 		delete[] adjacencyMatrix[i];
+		delete[] edgeMarkedMatrix[i];
+		delete[] edgeVisitedMatrix[i];
 	}
 	delete[] adjacencyMatrix;
+	delete[] edgeMarkedMatrix;
+	delete[] edgeVisitedMatrix;
 }
 
 template<class T>
@@ -76,7 +80,9 @@ bool Graph<T>::GetEdgeMarked(int vertex1, int vertex2){
 }
 
 template<class T>
-void Graph<T>::Prim(int vertex){
+void Graph<T>::Prim(int vertex, System::Windows::Forms::ListBox::ObjectCollection ^&output){
+	output->Add("Order:");
+	output->Add("Start->End(Weight)");
 	spanningTreeEdges.clear();
 	treeEdgeCount = 0;
 	if (vertices[vertex].IsMarked()){
@@ -104,11 +110,11 @@ void Graph<T>::Prim(int vertex){
 			treeEdgeCount++;
 		}
 	}
-	PrimStep();
+	PrimStep(output);
 }
 
 template<class T>
-void Graph<T>::PrimStep(){
+void Graph<T>::PrimStep(System::Windows::Forms::ListBox::ObjectCollection ^&output){
 	list<Edge>::iterator it;
 	Edge *smallestEdge;
 	Vertex<T> *v = nullptr;
@@ -126,6 +132,9 @@ void Graph<T>::PrimStep(){
 		//Does nothing
 		smallestEdge->Marked = true;
 		edgeMarkedMatrix[smallestEdge->vertexIndex][smallestEdge->DestVertexIndex] = true;
+
+		//Write to the output window
+		output->Add(smallestEdge->vertexIndex.ToString() + "->" + smallestEdge->DestVertexIndex.ToString() + "(" + smallestEdge->Weight.ToString() + ")");
 
 		//Add the edges connected to the vertex to the spanning tree
 		for (int i = 0; i < vertexCount; i++){
@@ -146,7 +155,7 @@ void Graph<T>::PrimStep(){
 				treeEdgeCount++;
 			}
 		}
-		PrimStep();
+		PrimStep(output);
 	}
 	else{
 		return;
@@ -164,6 +173,7 @@ list<Edge> Graph<T>::GetSortedEdges(){
 			e.vertexIndex = i;
 			e.DestVertexIndex = j;
 			e.Weight = adjacencyMatrix[i][j];
+			l.push_back(e);
 		}
 	}
 	l.sort();
@@ -171,24 +181,54 @@ list<Edge> Graph<T>::GetSortedEdges(){
 }
 
 template<class T>
-void Graph<T>::Kruskal(){
+void Graph<T>::Kruskal(System::Windows::Forms::ListBox::ObjectCollection ^&output){
+	output->Add("Order:");
+	output->Add("Start->End(Weight)");
 	//Make a list of all edges
 	list<Edge> edges = GetSortedEdges();
 	list<Edge>::iterator it;
 	for (it = edges.begin(); it != edges.end(); it++){
+		if (vertices[it->vertexIndex].IsMarked() && vertices[it->DestVertexIndex].IsMarked())
+			continue;
+		edgeMarkedMatrix[it->vertexIndex][it->DestVertexIndex] = true;
 		it->Marked = true;
 		bool result = false;
+
 		HasCycle(&vertices[it->vertexIndex], result);
+
 		if (result){
 			it->Marked = false;
+			edgeMarkedMatrix[it->vertexIndex][it->DestVertexIndex] = false;
 		}
 		if (it->Marked){
 			edgeMarkedMatrix[it->vertexIndex][it->DestVertexIndex] = true;
 			vertices[it->vertexIndex].Mark(true);
 			vertices[it->DestVertexIndex].Mark(true);
+			int src = it->vertexIndex;
+			int dest = it->DestVertexIndex;
+			int w = it->Weight;
+			output->Add(src.ToString() + "->" + dest.ToString() + "(" + w.ToString() + ")");
 		}
 		//Required after calling HasCycle()
 		VisitEntireGraph(false);
+	}
+}
+
+template<class T>
+void Graph<T>::HasCycle(Vertex<T> *vertex, bool &result) {
+	if (vertex->IsVisited()){
+		result = true;
+		return;
+	}
+	vertex->Visit(true);
+	for (int i = 0; i < vertexCount; i++){
+		//Direction matters
+		if (adjacencyMatrix[vertex->GetIndex()][i] != 0){
+			if (!edgeVisitedMatrix[vertex->GetIndex()][i] && edgeMarkedMatrix[vertex->GetIndex()][i]){
+				edgeVisitedMatrix[vertex->GetIndex()][i] = true;
+				HasCycle(&vertices[i], result);
+			}
+		}
 	}
 }
 
@@ -313,22 +353,4 @@ bool Graph<T>::CheckIsConnected() {
 			return false;
 	}
 	return true;
-}
-
-template<class T>
-void Graph<T>::HasCycle(Vertex<T> *vertex, bool &result) {
-	if (vertex->IsVisited()){
-		result = true;
-		return;
-	}
-	vertex->Visit(true);
-	for (int i = 0; i < vertexCount; i++){
-		//Direction matters
-		if (adjacencyMatrix[vertex->GetIndex()][i] != 0){
-			if (!edgeVisitedMatrix[vertex->GetIndex()][i] && edgeMarkedMatrix[vertex->GetIndex()][i]){
-				edgeVisitedMatrix[vertex->GetIndex()][i] = true;
-				HasCycle(&vertices[i], result);
-			}
-		}
-	}
 }
