@@ -82,19 +82,3 @@ T Vertex<T>::GetT() const{
 //Edge *Vertex::GetEdge(int index){
 //	return (edges + index);
 //}
-
-//bool Edge::operator<(Edge &other){
-//	return Weight < other.Weight;
-//}
-//bool Edge::operator>(Edge &other){
-//	return Weight > other.Weight;
-//}
-//bool Edge::operator==(Edge &other){
-//	return Weight == other.Weight;
-//}
-//bool Edge::operator<=(Edge &other){
-//	return Weight <= other.Weight;
-//}
-//bool Edge::operator>=(Edge &other){
-//	return Weight >= other.Weight;
-//}

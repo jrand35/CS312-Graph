@@ -21,9 +21,6 @@
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Vertex.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GraphForm.h">
@@ -46,6 +43,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Graph.template">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="Vertex.template">
       <Filter>Source Files</Filter>
     </None>
   </ItemGroup>

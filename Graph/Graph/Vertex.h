@@ -25,3 +25,5 @@ private:
 	bool marked;
 	bool visited;
 };
+
+#include "Vertex.template"

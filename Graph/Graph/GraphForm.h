@@ -417,12 +417,12 @@ namespace GraphProject {
 				int y2 = y2_ - (ARROW_OFFSET * Math::Sin(direction));
 
 				//TODO: Handle drawing marked edges
-				//if (!v1->GetEdge(j)->Marked){
-				//	g->DrawLine(edgePen, x1 + 16, y1 + 16, x2 + 16, y2 + 16);
-				//}
-				//else{
-				//	g->DrawLine(edgePen2, x1 + 16, y1 + 16, x2 + 16, y2 + 16);
-				//}
+				if (!graph->GetEdgeMarked(i, j)){
+					g->DrawLine(edgePen, x1 + 16, y1 + 16, x2 + 16, y2 + 16);
+				}
+				else{
+					g->DrawLine(edgePen2, x1 + 16, y1 + 16, x2 + 16, y2 + 16);
+				}
 			}
 		}
 	}

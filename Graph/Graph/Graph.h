@@ -14,11 +14,22 @@ struct Edge {
 	int DestVertexIndex;
 	bool Marked;
 	bool Visited;
-	bool operator<(Edge &other);
-	bool operator>(Edge &other);
-	bool operator==(Edge &other);
-	bool operator<=(Edge &other);
-	bool operator>=(Edge &other);
+
+	bool Edge::operator<(Edge &other){
+		return Weight < other.Weight;
+	}
+	bool Edge::operator>(Edge &other){
+		return Weight > other.Weight;
+	}
+	bool Edge::operator==(Edge &other){
+		return Weight == other.Weight;
+	}
+	bool Edge::operator<=(Edge &other){
+		return Weight <= other.Weight;
+	}
+	bool Edge::operator>=(Edge &other){
+		return Weight >= other.Weight;
+	}
 };
 
 template<class T>
@@ -32,6 +43,7 @@ public:
 	void AddVertex(int index, T type);
 	Vertex<T> *GetVertex(int index);
 	int GetEdgeWeight(int vertex1, int vertex2);
+	bool GetEdgeMarked(int vertex1, int vertex2);
 	//Fix, Prim and Kruskal should ignore directions
 	void Prim(int vertex);
 	void Kruskal();

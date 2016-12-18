@@ -1,4 +1,4 @@
-﻿Build started 12/17/2016 7:36:13 PM.
+﻿Build started 12/17/2016 8:35:55 PM.
      1>Project "C:\Users\Joshua\Documents\GitHub\CS312-Graph\Graph\Graph\Graph.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /AI"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.2\\" /AI"C:\Program Files (x86)\Windows Kits\8.1\References\CommonConfiguration\Neutral" /AI"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.2\Facades\\" /Zi /clr /nologo /W3 /WX- /Od /D _DEBUG /D _UNICODE /D UNICODE /EHa /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Debug\\" /Fd"x64\Debug\vc120.pdb" /TP /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.2\mscorlib.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.2\System.Data.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.2\System.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.2\System.Drawing.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.2\System.Windows.Forms.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.2\System.Xml.dll" /errorReport:prompt /clr:nostdlib GraphForm.cpp Main.cpp
@@ -8,121 +8,20 @@
      1>c:\users\joshua\documents\github\cs312-graph\graph\graph\GraphForm.h(415): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
      1>c:\users\joshua\documents\github\cs312-graph\graph\graph\GraphForm.h(416): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
      1>c:\users\joshua\documents\github\cs312-graph\graph\graph\GraphForm.h(417): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
-     1>c:\users\joshua\documents\github\cs312-graph\graph\graph\Graph.template(195): error C2039: 'EdgeCount' : is not a member of 'Vertex<T>'
-                 with
-                 [
-                     T=Pos
-                 ]
-                 c:\users\joshua\documents\github\cs312-graph\graph\graph\Graph.template(189) : while compiling class template member function 'void Graph<Pos>::DepthFirstSearch(int,System::String ^&)'
-                 c:\users\joshua\documents\github\cs312-graph\graph\graph\GraphForm.h(458) : see reference to function template instantiation 'void Graph<Pos>::DepthFirstSearch(int,System::String ^&)' being compiled
-                 c:\users\joshua\documents\github\cs312-graph\graph\graph\GraphForm.h(112) : see reference to class template instantiation 'Graph<Pos>' being compiled
-     1>c:\users\joshua\documents\github\cs312-graph\graph\graph\Graph.template(196): error C2039: 'GetEdge' : is not a member of 'Vertex<T>'
-                 with
-                 [
-                     T=Pos
-                 ]
-     1>c:\users\joshua\documents\github\cs312-graph\graph\graph\Graph.template(196): error C2227: left of '->DestVertexIndex' must point to class/struct/union/generic type
-     1>c:\users\joshua\documents\github\cs312-graph\graph\graph\Graph.template(206): error C2039: 'EdgeCount' : is not a member of 'Vertex<T>'
-                 with
-                 [
-                     T=Pos
-                 ]
-                 c:\users\joshua\documents\github\cs312-graph\graph\graph\Graph.template(201) : while compiling class template member function 'void Graph<Pos>::BreadthFirstSearch(int,System::String ^&)'
-                 c:\users\joshua\documents\github\cs312-graph\graph\graph\GraphForm.h(473) : see reference to function template instantiation 'void Graph<Pos>::BreadthFirstSearch(int,System::String ^&)' being compiled
-     1>c:\users\joshua\documents\github\cs312-graph\graph\graph\Graph.template(207): error C2039: 'GetEdge' : is not a member of 'Vertex<T>'
-                 with
-                 [
-                     T=Pos
-                 ]
-     1>c:\users\joshua\documents\github\cs312-graph\graph\graph\Graph.template(207): error C2227: left of '->DestVertexIndex' must point to class/struct/union/generic type
-     1>c:\users\joshua\documents\github\cs312-graph\graph\graph\Graph.template(207): error C2228: left of '.IsMarked' must have class/struct/union
-     1>c:\users\joshua\documents\github\cs312-graph\graph\graph\Graph.template(208): error C2039: 'GetEdge' : is not a member of 'Vertex<T>'
-                 with
-                 [
-                     T=Pos
-                 ]
-     1>c:\users\joshua\documents\github\cs312-graph\graph\graph\Graph.template(208): error C2227: left of '->DestVertexIndex' must point to class/struct/union/generic type
-     1>c:\users\joshua\documents\github\cs312-graph\graph\graph\Graph.template(208): error C2228: left of '.ToString' must have class/struct/union
-     1>c:\users\joshua\documents\github\cs312-graph\graph\graph\Graph.template(209): error C2039: 'GetEdge' : is not a member of 'Vertex<T>'
-                 with
-                 [
-                     T=Pos
-                 ]
-     1>c:\users\joshua\documents\github\cs312-graph\graph\graph\Graph.template(209): error C2227: left of '->DestVertexIndex' must point to class/struct/union/generic type
-     1>c:\users\joshua\documents\github\cs312-graph\graph\graph\Graph.template(209): error C2228: left of '.Mark' must have class/struct/union
-     1>c:\users\joshua\documents\github\cs312-graph\graph\graph\Graph.template(212): error C2039: 'EdgeCount' : is not a member of 'Vertex<T>'
-                 with
-                 [
-                     T=Pos
-                 ]
-     1>c:\users\joshua\documents\github\cs312-graph\graph\graph\Graph.template(213): error C2039: 'GetEdge' : is not a member of 'Vertex<T>'
-                 with
-                 [
-                     T=Pos
-                 ]
-     1>c:\users\joshua\documents\github\cs312-graph\graph\graph\Graph.template(213): error C2227: left of '->DestVertexIndex' must point to class/struct/union/generic type
          Main.cpp
      1>c:\users\joshua\documents\github\cs312-graph\graph\graph\GraphForm.h(412): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
      1>c:\users\joshua\documents\github\cs312-graph\graph\graph\GraphForm.h(414): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
      1>c:\users\joshua\documents\github\cs312-graph\graph\graph\GraphForm.h(415): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
      1>c:\users\joshua\documents\github\cs312-graph\graph\graph\GraphForm.h(416): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
      1>c:\users\joshua\documents\github\cs312-graph\graph\graph\GraphForm.h(417): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
-     1>c:\users\joshua\documents\github\cs312-graph\graph\graph\Graph.template(195): error C2039: 'EdgeCount' : is not a member of 'Vertex<T>'
-                 with
-                 [
-                     T=Pos
-                 ]
-                 c:\users\joshua\documents\github\cs312-graph\graph\graph\Graph.template(189) : while compiling class template member function 'void Graph<Pos>::DepthFirstSearch(int,System::String ^&)'
-                 c:\users\joshua\documents\github\cs312-graph\graph\graph\GraphForm.h(458) : see reference to function template instantiation 'void Graph<Pos>::DepthFirstSearch(int,System::String ^&)' being compiled
-                 c:\users\joshua\documents\github\cs312-graph\graph\graph\GraphForm.h(112) : see reference to class template instantiation 'Graph<Pos>' being compiled
-     1>c:\users\joshua\documents\github\cs312-graph\graph\graph\Graph.template(196): error C2039: 'GetEdge' : is not a member of 'Vertex<T>'
-                 with
-                 [
-                     T=Pos
-                 ]
-     1>c:\users\joshua\documents\github\cs312-graph\graph\graph\Graph.template(196): error C2227: left of '->DestVertexIndex' must point to class/struct/union/generic type
-     1>c:\users\joshua\documents\github\cs312-graph\graph\graph\Graph.template(206): error C2039: 'EdgeCount' : is not a member of 'Vertex<T>'
-                 with
-                 [
-                     T=Pos
-                 ]
-                 c:\users\joshua\documents\github\cs312-graph\graph\graph\Graph.template(201) : while compiling class template member function 'void Graph<Pos>::BreadthFirstSearch(int,System::String ^&)'
-                 c:\users\joshua\documents\github\cs312-graph\graph\graph\GraphForm.h(473) : see reference to function template instantiation 'void Graph<Pos>::BreadthFirstSearch(int,System::String ^&)' being compiled
-     1>c:\users\joshua\documents\github\cs312-graph\graph\graph\Graph.template(207): error C2039: 'GetEdge' : is not a member of 'Vertex<T>'
-                 with
-                 [
-                     T=Pos
-                 ]
-     1>c:\users\joshua\documents\github\cs312-graph\graph\graph\Graph.template(207): error C2227: left of '->DestVertexIndex' must point to class/struct/union/generic type
-     1>c:\users\joshua\documents\github\cs312-graph\graph\graph\Graph.template(207): error C2228: left of '.IsMarked' must have class/struct/union
-     1>c:\users\joshua\documents\github\cs312-graph\graph\graph\Graph.template(208): error C2039: 'GetEdge' : is not a member of 'Vertex<T>'
-                 with
-                 [
-                     T=Pos
-                 ]
-     1>c:\users\joshua\documents\github\cs312-graph\graph\graph\Graph.template(208): error C2227: left of '->DestVertexIndex' must point to class/struct/union/generic type
-     1>c:\users\joshua\documents\github\cs312-graph\graph\graph\Graph.template(208): error C2228: left of '.ToString' must have class/struct/union
-     1>c:\users\joshua\documents\github\cs312-graph\graph\graph\Graph.template(209): error C2039: 'GetEdge' : is not a member of 'Vertex<T>'
-                 with
-                 [
-                     T=Pos
-                 ]
-     1>c:\users\joshua\documents\github\cs312-graph\graph\graph\Graph.template(209): error C2227: left of '->DestVertexIndex' must point to class/struct/union/generic type
-     1>c:\users\joshua\documents\github\cs312-graph\graph\graph\Graph.template(209): error C2228: left of '.Mark' must have class/struct/union
-     1>c:\users\joshua\documents\github\cs312-graph\graph\graph\Graph.template(212): error C2039: 'EdgeCount' : is not a member of 'Vertex<T>'
-                 with
-                 [
-                     T=Pos
-                 ]
-     1>c:\users\joshua\documents\github\cs312-graph\graph\graph\Graph.template(213): error C2039: 'GetEdge' : is not a member of 'Vertex<T>'
-                 with
-                 [
-                     T=Pos
-                 ]
-     1>c:\users\joshua\documents\github\cs312-graph\graph\graph\Graph.template(213): error C2227: left of '->DestVertexIndex' must point to class/struct/union/generic type
          Generating Code...
-     1>Done Building Project "C:\Users\Joshua\Documents\GitHub\CS312-Graph\Graph\Graph\Graph.vcxproj" (Build target(s)) -- FAILED.
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Joshua\Documents\GitHub\CS312-Graph\Graph\x64\Debug\Graph.exe" /INCREMENTAL /NOLOGO /ASSEMBLYRESOURCE:x64\Debug\Graph.GraphForm.resources /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /PDB:"C:\Users\Joshua\Documents\GitHub\CS312-Graph\Graph\x64\Debug\Graph.pdb" /ASSEMBLYDEBUG /SUBSYSTEM:WINDOWS /TLBID:1 /ENTRY:"main" /DYNAMICBASE /FIXED:NO /NXCOMPAT /MACHINE:X64 x64\Debug\GraphForm.obj
+         x64\Debug\Main.obj
+         "x64\Debug\.NETFramework,Version=v4.5.2.AssemblyAttributes.obj"
+         Graph.vcxproj -> C:\Users\Joshua\Documents\GitHub\CS312-Graph\Graph\x64\Debug\Graph.exe
+     1>Done Building Project "C:\Users\Joshua\Documents\GitHub\CS312-Graph\Graph\Graph\Graph.vcxproj" (Build target(s)).
 
-Build FAILED.
+Build succeeded.
 
-Time Elapsed 00:00:01.03
+Time Elapsed 00:00:02.15
