@@ -26,17 +26,6 @@ void Vertex<T>::Set(int index, T type){
 	Vertex::type = type;
 }
 
-//TODO: Should sort all edges after insertions
-//Edge *Vertex::AddEdge(int otherVertex, int weight) {
-//	edges[edgeCount].vertexIndex = index;
-//	edges[edgeCount].DestVertexIndex = otherVertex;
-//	edges[edgeCount].Weight = weight;
-//	edges[edgeCount].Marked = false;
-//	edges[edgeCount].Visited = false;
-//	edgeCount++;
-//	return &edges[edgeCount - 1];
-//}
-
 template<class T>
 void Vertex<T>::Mark(bool mark){
 	marked = mark;

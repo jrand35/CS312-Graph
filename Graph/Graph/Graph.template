@@ -126,7 +126,6 @@ void Graph<T>::PrimStep(){
 		//Does nothing
 		smallestEdge->Marked = true;
 		edgeMarkedMatrix[smallestEdge->vertexIndex][smallestEdge->DestVertexIndex] = true;
-		edgeMarkedMatrix[smallestEdge->DestVertexIndex][smallestEdge->vertexIndex] = true;
 
 		//Add the edges connected to the vertex to the spanning tree
 		for (int i = 0; i < vertexCount; i++){
@@ -193,16 +192,33 @@ void Graph<T>::Kruskal(){
 	}
 }
 
+//Should go in order of lightest to heaviest edge
 template<class T>
 void Graph<T>::DepthFirstSearch(int vertex, String ^&result){
 	if (vertices[vertex].IsVisited())
 		return;
 
+	list<Edge> edges;
+	int edgeCount = 0;
+
 	vertices[vertex].Visit(true);
 	result += vertex.ToString() + " ";
 	for (int i = 0; i < vertexCount; i++){
-		if (adjacencyMatrix[vertex][i] != 0)
-			DepthFirstSearch(i, result);
+		if (adjacencyMatrix[vertex][i] != 0){
+			Edge e;
+			e.vertexIndex = vertex;
+			e.DestVertexIndex = i;
+			e.Weight = adjacencyMatrix[vertex][i];
+
+			edges.push_back(e);
+			edgeCount++;
+		}
+	}
+
+	edges.sort();
+
+	for (list<Edge>::iterator it = edges.begin(); it != edges.end(); it++){
+		DepthFirstSearch(it->DestVertexIndex, result);
 	}
 }
 
@@ -211,19 +227,40 @@ void Graph<T>::BreadthFirstSearch(int vertex, String ^&result){
 	if (vertices[vertex].IsVisited())
 		return;
 
+	list<Edge> edges;
+	int edgeCount = 0;
+
 	vertices[vertex].Visit(true);
 	for (int i = 0; i < vertexCount; i++){
 		if (adjacencyMatrix[vertex][i] != 0){
 			if (!vertices[i].IsMarked()){
-				result += i.ToString() + " ";
-				vertices[i].Mark(true);
+				//result += i.ToString() + " ";
+				//vertices[i].Mark(true);
+				Edge e;
+				e.vertexIndex = vertex;
+				e.DestVertexIndex = i;
+				e.Weight = adjacencyMatrix[vertex][i];
+
+				edges.push_back(e);
+				edgeCount++;
 			}
 		}
 	}
+
+	edges.sort();
+
+	for (list<Edge>::iterator it = edges.begin(); it != edges.end(); it++){
+		result += it->DestVertexIndex.ToString() + " ";
+		vertices[it->DestVertexIndex].Mark(true);
+	}
+	for (list<Edge>::iterator it = edges.begin(); it != edges.end(); it++){
+		BreadthFirstSearch(it->DestVertexIndex, result);
+	}
+	/*
 	for (int i = 0; i < vertexCount; i++){
 		if (adjacencyMatrix[vertex][i] != 0)
 			BreadthFirstSearch(i, result);
-	}
+	}*/
 }
 
 template<class T>
