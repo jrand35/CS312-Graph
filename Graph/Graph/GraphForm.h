@@ -1,8 +1,10 @@
 #pragma once
+#include <ctime>
 #include "Graph.h"
 #include "Pos.h"
 
 const int ARROW_OFFSET = 30;
+const int RANDOM_VERTEX_COUNT = 30;
 
 namespace GraphProject {
 
@@ -75,6 +77,7 @@ namespace GraphProject {
 	private: System::Windows::Forms::Button^  cyclicButton;
 
 	private: System::Windows::Forms::Label^  label8;
+	private: System::Windows::Forms::Button^  randomButton;
 
 
 
@@ -162,6 +165,16 @@ namespace GraphProject {
 			file.close();
 			g->SetupMatrices();
 		}
+
+		void LoadRandomVertices(Graph<Pos>* g){
+			for (int i = 0; i < RANDOM_VERTEX_COUNT; i++){
+				Pos p;
+				p.X = 20 + rand() % 630;
+				p.Y = 20 + rand() % 630;
+				g->AddVertex(i, p);
+			}
+			g->SetupMatrices();
+		}
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -208,6 +221,7 @@ namespace GraphProject {
 			this->acyclicButton = (gcnew System::Windows::Forms::Button());
 			this->cyclicButton = (gcnew System::Windows::Forms::Button());
 			this->label8 = (gcnew System::Windows::Forms::Label());
+			this->randomButton = (gcnew System::Windows::Forms::Button());
 			this->SuspendLayout();
 			// 
 			// panel1
@@ -439,12 +453,23 @@ namespace GraphProject {
 			this->label8->TabIndex = 17;
 			this->label8->Text = L"Load a Graph";
 			// 
+			// randomButton
+			// 
+			this->randomButton->Location = System::Drawing::Point(781, 64);
+			this->randomButton->Name = L"randomButton";
+			this->randomButton->Size = System::Drawing::Size(102, 23);
+			this->randomButton->TabIndex = 16;
+			this->randomButton->Text = L"Random Graph";
+			this->randomButton->UseVisualStyleBackColor = true;
+			this->randomButton->Click += gcnew System::EventHandler(this, &GraphForm::randomButton_Click);
+			// 
 			// GraphForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(1129, 762);
 			this->Controls->Add(this->label8);
+			this->Controls->Add(this->randomButton);
 			this->Controls->Add(this->cyclicButton);
 			this->Controls->Add(this->acyclicButton);
 			this->Controls->Add(this->undirectedButton);
@@ -517,6 +542,39 @@ namespace GraphProject {
 			panel1->Refresh();
 		}
 
+		void LoadGraphRandom(){
+			if (graph != nullptr){
+				delete graph;
+			}
+			graph = new Graph<Pos>();
+			LoadRandomVertices(graph);
+			graph->LoadRandomEdges();
+			labels = gcnew cli::array<Label^>(graph->VertexCount());
+
+			for (int i = 0; i < graph->VertexCount(); i++){
+				Label^ l = newLabel(i.ToString(), graph->GetVertex(i)->GetT().X, graph->GetVertex(i)->GetT().Y);
+				labels[labelCount] = l;
+				labelCount++;
+
+				for (int j = 0; j < graph->VertexCount(); j++){
+					int w = graph->GetEdgeWeight(i, j);
+					if (w == 0)
+						continue;
+					Pos p1 = graph->GetVertex(i)->GetT();
+					Pos p2 = graph->GetVertex(j)->GetT();
+					int x1 = p1.X;
+					int y1 = p1.Y;
+					int x2 = p2.X;
+					int y2 = p2.Y;
+					Point center = Point(x1 + (x2 - x1) / 2, y1 + (y2 - y1) / 2);
+					newLabel2(w.ToString(), center.X + 8, center.Y + 8);
+				}
+			}
+			EnableGraphButtons(false);
+			graphLoaded = true;
+			panel1->Refresh();
+		}
+
 		void EnableButtons(bool enabled){
 			primButton->Enabled = enabled;
 			kruskalButton->Enabled = enabled;
@@ -534,6 +592,7 @@ namespace GraphProject {
 
 #pragma endregion
 	private: System::Void GraphForm_Load(System::Object^  sender, System::EventArgs^  e) {
+		srand(time(0));
 		graph = nullptr;
 		labelCount = 0;
 		g = panel1->CreateGraphics();
@@ -671,6 +730,10 @@ private: System::Void undirectedButton_Click(System::Object^  sender, System::Ev
 }
 private: System::Void acyclicButton_Click(System::Object^  sender, System::EventArgs^  e) {
 	LoadGraph("Acyclic");
+	EnableButtons(true);
+}
+private: System::Void randomButton_Click(System::Object^  sender, System::EventArgs^  e) {
+	LoadGraphRandom();
 	EnableButtons(true);
 }
 };

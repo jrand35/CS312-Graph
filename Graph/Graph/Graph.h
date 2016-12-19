@@ -40,6 +40,7 @@ public:
 	~Graph();
 	void SetupMatrices();
 	void LoadEdges(string filename);
+	void LoadRandomEdges();
 	int VertexCount() const;
 	void AddVertex(int index, T type);
 	Vertex<T> *GetVertex(int index);
@@ -61,6 +62,8 @@ private:
 	bool **edgeMarkedMatrix;
 	bool **edgeVisitedMatrix;
 	bool *inTreeMatrix;
+	void VisitAllVertices(int vertex);
+	bool AllVerticesReached();
 	void VisitAllMarkedVertices(int vertex);
 	bool AllReachableVerticesConnected();
 	Vertex<T> vertices[MAX_VERTICES];

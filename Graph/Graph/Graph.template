@@ -60,6 +60,53 @@ void Graph<T>::LoadEdges(string filename){
 }
 
 template<class T>
+void Graph<T>::LoadRandomEdges() {
+	for (int i = 0; i < 60; i++){
+		int v1 = -1, v2 = -1;
+		do{
+			v1 = rand() % vertexCount;
+			v2 = rand() % vertexCount;
+		} while (adjacencyMatrix[v1][v2] != 0);
+		adjacencyMatrix[v1][v2] = 1 + rand() % 11;
+	}
+	for (int i = 0; i < vertexCount; i++){
+		adjacencyMatrix[i][i] = 0;
+	}
+	//bool connected = false;
+	//do{
+	//	VisitAllVertices(false);
+	//	int v1 = rand() % vertexCount;
+	//	int v2 = rand() % vertexCount;
+	//	adjacencyMatrix[v1][v2] = 1 + rand() % 11;	//1 - 10
+	//	VisitAllVertices(0);
+	//	connected = AllVerticesReached();
+	//} while (!connected);
+	//VisitAllVertices(false);
+}
+
+template<class T>
+void Graph<T>::VisitAllVertices(int vertex){
+	if (vertices[vertex].IsVisited())
+		return;
+
+	vertices[vertex].Visit(true);
+	for (int i = 0; i < vertexCount; i++){
+		if (adjacencyMatrix[vertex][i] != 0 || adjacencyMatrix[i][vertex] != 0)
+			VisitAllVertices(i);
+	}
+}
+
+template<class T>
+bool Graph<T>::AllVerticesReached(){
+	for (int i = 0; i < vertexCount; i++){
+		if (!vertices[i].IsVisited()){
+			return false;
+		}
+	}
+	return true;
+}
+
+template<class T>
 int Graph<T>::VertexCount() const{
 	return vertexCount;
 }
