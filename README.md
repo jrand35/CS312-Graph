@@ -8,7 +8,7 @@ Programming Portfolio
 - Algorithms (CS312) Project
 - Written on 12/22/2016 by Joshua Rand
 
-- Code files in directory:
+Code files in directory:
 - Graph\Graph\Graph.h - Generic Graph Declaration file
 - Graph\Graph\Graph.template - Generic Graph Implementation file
 - Graph\Graph\Main.cpp - Runs the program
